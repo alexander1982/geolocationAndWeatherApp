@@ -11,7 +11,9 @@ const VENDOR_LIBS = [
 	"react-router-dom",
 	"redux",
 	"redux-form",
-	"redux-promise"
+	"redux-promise",
+	"react-easy-chart",
+	"react-stockcharts"
 ];
 
 module.exports = {
@@ -35,7 +37,7 @@ module.exports = {
 				use: ['style-loader', 'css-loader']
 			},
 			{
-				test: /.(jpe?g|png|gif|svg)/,
+				test: /.(jpe?g|png|gif|svg|woff|woff2|eot|ttf)$/,
 				use: [
 					{
 						loader: 'url-loader',
@@ -51,7 +53,7 @@ module.exports = {
 		names: ['vendors', 'manifest']
 	}),
 	new htmlWebpackPlugin({
-		template: './src/index.html'
+		template: 'src/index.html'
 	}),
 	new webpack.DefinePlugin({
 		'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
@@ -59,7 +61,7 @@ module.exports = {
 	],
 	devServer: {
 		historyApiFallback: true,
-		contentBase: '/',
+		contentBase: './',
 		port: 8088
 	}
 };
