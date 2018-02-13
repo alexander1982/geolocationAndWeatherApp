@@ -9,12 +9,19 @@ import SearchNew from './search_new';
 import NavBar from './nav_bar';
 
 class GeoIndex extends Component {
+	renderMap() {
+		if(this.props.location.lat == null){
+			return (<div>
+				<img className="img-fluid gif-margin" src="http://cdn.ebaumsworld.com/mediaFiles/picture/416301/83779543.gif"/>
+			</div>)
+		}
+		return (<GoogleMap lat={this.props.location.lat} lng={this.props.location.lng}/>)
+	}
 
 	render() {
-		if(this.props.location && !this.props.weather){
+		if(!this.props.weather){
 			this.props.fetchWeather(this.props.location);
 		}
-		console.log();
 
 		return (
 		<div className="container-fluid">
@@ -35,13 +42,13 @@ class GeoIndex extends Component {
 					<SearchNew/>
 				</div>
 				<div className="col-sm-8 col-lg-4 col-12 column-mutual-css map-width">
-					<GoogleMap lat={this.props.location.lat} lng={this.props.location.lng}/>
+					{this.renderMap()}
 				</div>
 
 				<div className="col-sm-12 col-lg-12 col-12">
 					<div className="row">
 						<div className="col-sm-3 col-lg-3 hidden-lg-down">
-							
+
 						</div>
 						<div className="col-sm-6 col-lg-3 col-12 column-mutual-css weather-info chart-and-graph-background-left">
 							<WeatherInfo weather={this.props.weather}/>

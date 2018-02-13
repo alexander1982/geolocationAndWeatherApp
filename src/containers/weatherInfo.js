@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
 const path = require('path');
 
-const day_clear_sky = path.resolve(__dirname, 'assets/images/day_clear_sky.png');
-const day_broken_clouds = path.resolve(__dirname, 'assets/images/day_broken_clouds.png');
-const day_few_clouds = path.resolve(__dirname, 'assets/images/day_few_clouds.png');
-const day_rain = path.resolve(__dirname, 'assets/images/day_rain.png');
-const day_scattered_clouds = path.resolve(__dirname, 'assets/images/day_scattered_clouds.png');
-const day_shower_rain = path.resolve(__dirname, 'assets/images/day_shower_rain.png');
-const day_snow = path.resolve(__dirname, 'assets/images/day_snow.png');
-const day_thunder_storm = path.resolve(__dirname, 'assets/images/day_thunder_storm.png');
-const day_light_snow = path.resolve(__dirname, 'assets/images/day_light_snow.png');
+const day_clear_sky = './images/day_clear_sky.png';
+const day_broken_clouds = './images/day_broken_clouds.png';
+const day_few_clouds = './images/day_few_clouds.png';
+const day_rain = './images/day_rain.png';
+const day_scattered_clouds = './images/day_scattered_clouds.png';
+const day_shower_rain = './images/day_shower_rain.png';
+const day_snow = './images/day_snow.png';
+const day_thunder_storm = './images/day_thunder_storm.png';
+const day_light_snow = './images/day_light_snow.png';
+const overcast_clouds = './images/overcast_clouds.png';
 
 
-console.log('From weatherInfo ',__dirname);
+console.log('From weatherInfo ','./overcast_clouds.png');
 class RenderGraph extends Component {
 	constructor(props) {
 		super(props);
@@ -45,6 +46,10 @@ class RenderGraph extends Component {
 				return day_snow;
 			case 'light snow':
 				return day_light_snow;
+			case 'overcast clouds':
+				return overcast_clouds;
+			case 'light rain':
+				return overcast_clouds;
 			default:
 				console.log('no');
 				return 'no';
@@ -59,6 +64,7 @@ class RenderGraph extends Component {
 		}
 
 		const weatherImage = this.renderWeatherImage();
+    const nowTemperature = Math.floor(this.state.weather[0].main.temp -273.15);
 
 		return (
 		<div className="row graph">
@@ -66,23 +72,23 @@ class RenderGraph extends Component {
 
 				<div className="col-sm-12 col-lg-12 col-12 search-margin">
 					<small className="h3 text-muted text-font-size">Weather:</small>
-					<span>{this.state.weather[0].weather[0].description}</span>
+					<span className="now-weather">{this.state.weather[0].weather[0].description}</span>
 				</div>
 				<div className="col-sm-12 col-lg-12 col-12 search-margin">
 					<small className="h3 text-muted text-font-size">Temperature:</small>
-					<span>{this.state.weather[0].main.temp}</span>
+					<span className="now-weather">{nowTemperature}C</span>
 				</div>
 				<div className="col-sm-12 col-lg-12 col-12 search-margin">
 					<small className="h3 text-muted text-font-size">Wind:</small>
-					<span>{this.state.weather[0].wind.speed}</span>
+					<span className="now-weather">{this.state.weather[0].wind.speed}</span>
 				</div>
 				<div className="col-sm-12 col-lg-12 col-12 search-margin">
 					<small className="h3 text-muted text-font-size">Humidity:</small>
-					<span>{this.state.weather[0].main.humidity}</span>
+					<span className="now-weather">{this.state.weather[0].main.humidity}</span>
 				</div>
 				<div className="col-sm-12 col-lg-12 col-12 search-margin">
 					<small className="h3 text-muted text-font-size">Pressure:</small>
-					<span>{this.state.weather[0].main.pressure}</span>
+					<span className="now-weather">{this.state.weather[0].main.pressure}</span>
 				</div>
 			</div>
 

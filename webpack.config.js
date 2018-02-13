@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const htmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const VENDOR_LIBS = [
 	"axios",
@@ -37,10 +38,10 @@ module.exports = {
 				use: ['style-loader', 'css-loader']
 			},
 			{
-				test: /.(jpe?g|png|gif|svg|woff|woff2|eot|ttf)$/,
+				test: /\.(jpe?g|png|gif|svg|woff|woff2|eot|ttf|mp4)$/i,
 				use: [
 					{
-						loader: 'url-loader',
+						loader: 'url-loader' ,
 						options: {limit: 40000}
 					},
 				'image-webpack-loader'
@@ -57,11 +58,14 @@ module.exports = {
 	}),
 	new webpack.DefinePlugin({
 		'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-	})
+	}),
+	new CopyWebpackPlugin([
+		{ from: 'assets/images', to: path.join(__dirname, 'dist/images') }
+	])
 	],
 	devServer: {
 		historyApiFallback: true,
-		contentBase: './',
+		contentBase: path.join(__dirname, 'dist'),
 		port: 8088
 	}
 };

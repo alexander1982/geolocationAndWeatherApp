@@ -3,36 +3,48 @@
     color: #525252;
 }
 
-hr {
+hr{
     margin: 0 0 10% 0;
     background-color: #707070;
 }
 
-h4 {
+h4{
     font-family: Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif;
     font-weight: 400
 }
 
-.center-content {
+.center-content{
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
 }
 
-input.input-inner-text {
+.gif-margin{
+    margin-top: 2%;
+    border-radius: 0.5%;
+}
+
+.main-shadow{
+    box-shadow: 0 1px 5px #474747;
+}
+
+input.input-inner-text{
     background-color: transparent !important;
     font-family: Verdana, Geneva, sans-serif;
     text-shadow: 0 0 1px rgba(46, 46, 46, 0.45);
     font-size: 1rem;
 }
+
 /*This code disables the default input background color*/
-input:-webkit-autofill {
+input:-webkit-autofill{
     -webkit-box-shadow: inset 0 0 0 9999px white;
 }
+
 /*End of the code which disables the default input background color*/
 body{
-    background: linear-gradient(135deg, rgba(242,253,255,1) 0%,rgba(247,254,255,1) 25%,rgba(247,254,255,1) 60%,rgba(249,254,255,1) 100%);
+    background: linear-gradient(135deg, rgba(242, 253, 255, 1) 0%, rgba(247, 254, 255, 1) 25%, rgba(247, 254, 255, 1) 60%, rgba(249, 254, 255, 1) 100%);
 }
+
 h1{
     font-size: 1.6em;
 }
@@ -50,7 +62,7 @@ div.map{
     height: 12rem;
 }
 
-.search-margin {
+.search-margin{
     margin: 3%;
 }
 
@@ -86,7 +98,7 @@ div.column-mutual-css{
     box-shadow: inset 0 0 1px rgb(180, 181, 165);
     padding: 1%;
     border: 1px solid rgba(98, 106, 144, 0.41);
-    border-radius: 1%;
+    border-radius: 0.5%;
 }
 
 .search-width{
@@ -102,26 +114,31 @@ div.column-mutual-css{
 
 button.submit-style{
     height: 3rem;
+    outline: none!important;
+    margin-top: 0.5rem;
     border-color: rgba(116, 129, 161, 0.3);
     background: rgba(216, 208, 255, 0.31);
+    box-shadow: 0 1px 5px #474747;
     font-weight: 400;
 }
 
 button.submit-style:hover{
-    border-color: rgba(98, 106, 144, 0.41);
-    background: linear-gradient(135deg, rgba(255,255,255,1) 0%,rgba(174,224,249,1) 9%,rgba(126,210,252,1) 43%,rgba(174,224,249,1) 91%,rgba(255,255,255,1) 100%);
+    outline: none!important;
+    background: linear-gradient(to right, rgba(71, 108, 183, 1) 0%, rgba(93, 142, 239, 1) 3%, rgba(93, 142, 239, 1) 3%, rgba(74, 113, 191, 1) 32%, rgba(59, 89, 152, 1) 43%, rgba(59, 89, 152, 1) 49%, rgba(59, 89, 152, 1) 54%, rgba(74, 113, 191, 1) 70%, rgba(93, 142, 239, 1) 97%, rgba(74, 113, 191, 1) 100%);
 }
+
 .btn-primary{
-    border-color: rgba(181, 206, 255, 0.8);
-    background: #c7c7c7;
     display: flex;
     align-content: center;
     justify-content: center;
 }
-.btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open > .dropdown-toggle.btn-primary {
-    border-color: rgba(181, 206, 255, 0.8);
-    background: linear-gradient(135deg, rgba(255,255,255,1) 0%,rgba(174,224,249,1) 9%,rgba(126,210,252,1) 43%,rgba(174,224,249,1) 91%,rgba(255,255,255,1) 100%);
+
+.btn-primary:hover, .btn-primary:focus,.btn-primary:active, .btn-primary:visited, .open > .dropdown-toggle.btn-primary{
+    outline: none!important;
+    box-shadow: 0!important;
+    background: linear-gradient(to right, rgba(71, 108, 183, 1) 0%, rgba(93, 142, 239, 1) 3%, rgba(93, 142, 239, 1) 3%, rgba(74, 113, 191, 1) 32%, rgba(59, 89, 152, 1) 43%, rgba(59, 89, 152, 1) 49%, rgba(59, 89, 152, 1) 54%, rgba(74, 113, 191, 1) 70%, rgba(93, 142, 239, 1) 97%, rgba(74, 113, 191, 1) 100%);
 }
+
 span.submit-inner-html{
     font-size: medium;
     text-shadow: 0 0 2px black;
@@ -134,32 +151,38 @@ span.submit-inner-html:hover{
     text-shadow: 0 0 4px rgba(98, 102, 255, 0.55);
 }
 
-#myChart {
+#myChart{
     color: black;
 }
 
-.chart-and-graph-background-right {
-    background: white;
-    border: 1px solid rgba(98, 106, 144, 0.41);
-    border-radius: 1%;
-}
-.chart-and-graph-background-left {
+.chart-and-graph-background-right{
     background: white;
     border: 1px solid rgba(98, 106, 144, 0.41);
     border-radius: 1%;
 }
 
-form label {
+.chart-and-graph-background-left{
+    background: white;
+    border: 1px solid rgba(98, 106, 144, 0.41);
+    border-radius: 1%;
+}
+
+form label{
     color: #3f4045;
     font-weight: 600;
     font-size: small;
 }
 
-.search-input {
+.search-input{
     font-size: 0.8rem;
+    margin: 0 !important;
 }
 
-.list-group-style {
+div.form-group {
+    margin: 0;
+}
+
+.list-group-style{
     height: 14em;
 }
 
@@ -172,16 +195,13 @@ textarea:-webkit-autofill:hover,
 textarea:-webkit-autofill:focus,
 select:-webkit-autofill,
 select:-webkit-autofill:hover,
-select:-webkit-autofill:focus {
+select:-webkit-autofill:focus{
     transition: background-color 5000s ease-in-out 0s;
     outline: none;
     background-color: white !important;
 }
 
-
-
-
-.arrow-container {
+.arrow-container{
     margin: 0;
     padding: 0;
     display: flex;
@@ -192,7 +212,7 @@ select:-webkit-autofill:focus {
     transform: rotate(180deg);
 }
 
-.chevron {
+.chevron{
     margin: 0;
     padding: 0;
     position: absolute;
@@ -203,16 +223,16 @@ select:-webkit-autofill:focus {
     animation: move-chevron 3s ease-out infinite;
 }
 
-.chevron:first-child {
+.chevron:first-child{
     animation: move-chevron 3s ease-out 1s infinite;
 }
 
-.chevron:nth-child(2) {
+.chevron:nth-child(2){
     animation: move-chevron 3s ease-out 2s infinite;
 }
 
 .chevron:before,
-.chevron:after {
+.chevron:after{
     content: '';
     position: absolute;
     top: 0;
@@ -221,38 +241,53 @@ select:-webkit-autofill:focus {
     background: #2c3e50;
 }
 
-.chevron:before {
+.chevron:before{
     left: 0;
     transform: skewY(30deg);
 }
 
-.chevron:after {
+.chevron:after{
     right: 0;
     width: 50%;
     transform: skewY(-30deg);
 }
 
-@keyframes move-chevron {
-    25% {
+@keyframes move-chevron{
+    25%{
         opacity: 1;
     }
-    33.3% {
+    33.3%{
         opacity: 1;
         transform: translateY(2.28rem);
     }
-    66.6% {
+    66.6%{
         opacity: 1;
         transform: translateY(3.12rem);
     }
-    100% {
+    100%{
         opacity: 0;
         transform: translateY(4.8rem) scale(0.5);
     }
 }
 
-div#weather-thumbnail {
-    background: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(10,118,206,1) 37%,rgba(41,137,216,1) 53%,rgba(255,255,255,1) 100%);
+div#weather-thumbnail{
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, rgba(10, 118, 206, 1) 37%, rgba(41, 137, 216, 1) 53%, rgba(255, 255, 255, 1) 100%);
     padding-top: 8%;
 }
 
+span.now-weather{
+    background: linear-gradient(to right, rgba(221, 244, 255, 1) 0%, rgba(72, 150, 214, 1) 19%, rgba(60, 137, 201, 1) 40%, rgba(60, 137, 201, 1) 61%, rgba(68, 141, 201, 1) 81%, rgba(214, 240, 255, 1) 100%);
+    padding: 0 1em 0 1em;
+    color: white;
+}
 
+.arrow{
+    height: 2rem;
+    width:2rem;
+    margin-top: 0.4rem;
+    margin-left: 0.4rem;
+}
+
+.label-border {
+    border-bottom: 1px solid #a2a2a2;
+}

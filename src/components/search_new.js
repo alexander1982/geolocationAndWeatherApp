@@ -12,16 +12,16 @@ class SearchNew extends Component {
 		this.props.fetchGeoLocation(values);
 	}
 
-
 	renderField(field) {
 		const { meta:{ touched, error } } = field;
 		const className = `form-group ${touched && error? 'has-danger' : ''}`;
 
 		return (
 		<div className={className}>
-			<label>{field.label}</label>
+			<label className="label-border"><em><h6>{field.label}</h6></em></label>
+			<span><img className="img-fluid arrow" src="./images/arrow-down-icon.png"/></span>
 			<input
-			className="form-control form-width transparent-input input-inner-text search-input"
+			className="form-control form-width transparent-input input-inner-text search-input text-muted"
 			name="form-input"
 			type="text"
 			{...field.input}/>
