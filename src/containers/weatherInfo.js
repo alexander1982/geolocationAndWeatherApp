@@ -68,27 +68,27 @@ class RenderGraph extends Component {
 
 		return (
 		<div className="row graph">
-			<div className="col-lg-8 col-sm-8 col-8">
+			<div className="col-lg-8 col-sm-8 col-8 no-padding padding-top-1rem">
 
-				<div className="col-sm-12 col-lg-12 col-12 search-margin">
-					<small className="h3 text-muted text-font-size">Weather:</small>
+				<div className="col-sm-12 col-lg-12 col-12 search-margin no-padding">
+					<label className="text-font-size"><h6 className="weather-info-h6">Weather:</h6></label>
 					<span className="now-weather">{this.state.weather[0].weather[0].description}</span>
 				</div>
-				<div className="col-sm-12 col-lg-12 col-12 search-margin">
-					<small className="h3 text-muted text-font-size">Temperature:</small>
-					<span className="now-weather">{nowTemperature}C</span>
+				<div className="col-sm-12 col-lg-12 col-12 search-margin no-padding">
+					<label className="text-font-size"><h6 className="weather-info-h6">Temperature:</h6></label>
+					<span className="now-weather">{nowTemperature}C&#176;</span>
 				</div>
-				<div className="col-sm-12 col-lg-12 col-12 search-margin">
-					<small className="h3 text-muted text-font-size">Wind:</small>
-					<span className="now-weather">{this.state.weather[0].wind.speed}</span>
+				<div className="col-sm-12 col-lg-12 col-12 search-margin no-padding">
+					<label className="text-font-size"><h6 className="weather-info-h6">Wind:</h6></label>
+					<span className="now-weather">{this.state.weather[0].wind.speed}m/s</span>
 				</div>
-				<div className="col-sm-12 col-lg-12 col-12 search-margin">
-					<small className="h3 text-muted text-font-size">Humidity:</small>
-					<span className="now-weather">{this.state.weather[0].main.humidity}</span>
+				<div className="col-sm-12 col-lg-12 col-12 search-margin no-padding">
+					<label className="h6 text-font-size"><h6 className="weather-info-h6">Humidity:</h6></label>
+					<span className="now-weather">{this.state.weather[0].main.humidity}%</span>
 				</div>
-				<div className="col-sm-12 col-lg-12 col-12 search-margin">
-					<small className="h3 text-muted text-font-size">Pressure:</small>
-					<span className="now-weather">{this.state.weather[0].main.pressure}</span>
+				<div className="col-sm-12 col-lg-12 col-12 search-margin no-padding">
+					<label className="text-font-size"><h6 className="weather-info-h6">Pressure:</h6></label>
+					<span className="now-weather">{this.state.weather[0].main.pressure}hpa</span>
 				</div>
 			</div>
 

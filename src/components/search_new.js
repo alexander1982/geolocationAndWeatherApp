@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Field, reduxForm, reset } from 'redux-form';
+import { Field, reduxForm, reset, change } from 'redux-form';
 import { connect } from 'react-redux';
 import { fetchGeoLocation } from '../actions/index';
 
@@ -10,6 +10,7 @@ class SearchNew extends Component {
 
 	onFormSubmit(values) {
 		this.props.fetchGeoLocation(values);
+		
 	}
 
 	renderField(field) {
@@ -18,8 +19,7 @@ class SearchNew extends Component {
 
 		return (
 		<div className={className}>
-			<label className="label-border"><em><h6>{field.label}</h6></em></label>
-			<span><img className="img-fluid arrow" src="./images/arrow-down-icon.png"/></span>
+			<label><em><h6>{field.label}</h6></em></label>
 			<input
 			className="form-control form-width transparent-input input-inner-text search-input text-muted"
 			name="form-input"
@@ -37,7 +37,7 @@ class SearchNew extends Component {
 		<div>
 			<h4>Locate the weather</h4>
 			<hr/>
-			<form onSubmit={handleSubmit(this.onFormSubmit.bind(this))}>
+			<form className="street-margin" onSubmit={handleSubmit(this.onFormSubmit.bind(this))}>
 				<Field
 				label="Street"
 				name="street"
@@ -71,13 +71,21 @@ function validate(values) {
 		errors.country = 'Add a country name'
 	}
 
+	if(!values.street && !values.city && !values.country) {
+
+	}
+
 	return errors;
 }
 
-const afterSubmit = (result, dispatch) => dispatch(reset('New search form'));
+const afterSubmit = (result, dispatch) => {
+	dispatch(change('NewSearchForm', 'street', ''));
+	dispatch(change('NewSearchForm', 'city', ''));
+	dispatch(change('NewSearchForm', 'country', ''));
+};
 
 export default reduxForm({
 	                         validate,
-	                         form           : 'New search form',
-	                         onSubmitSuccess: afterSubmit
+	                         form           : 'NewSearchForm',
+	                         onSubmitSuccess: afterSubmit,
                          })(connect(null, { fetchGeoLocation })(SearchNew))

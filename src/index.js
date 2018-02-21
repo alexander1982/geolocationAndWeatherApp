@@ -9,10 +9,24 @@ import reducers from './reducers';
 
 import GeoIndex from './components/geo_index';
 
-const store = createStore(reducers, {}, applyMiddleware(ReduxPromise,logger));
+export const store = createStore(reducers, {}, applyMiddleware(ReduxPromise,logger));
 
 import '../style/style.css';
+import 'font-awesome-webpack2';
 
+let $ = require('jquery');
+window.jQuery = $;
+window.$ = window.jQuery;
+
+window.onload = function() {
+	if (window.$) {
+		// jQuery is loaded
+		alert("Yeah!");
+	} else {
+		// jQuery is not loaded
+		alert("Doesn't Work");
+	}
+};
 ReactDOM.render(
 	<Provider store={store}>
 		<BrowserRouter>

@@ -1,8 +1,24 @@
 import React, { Component } from 'react';
 const Chart = require('chart.js');
 const Moment = require('moment');
+import {connect} from 'react-redux';
 
 class WeatherChart extends Component {
+constructor(props) {
+	super(props);
+
+	this.state = {
+		weatherData: []
+	};
+}
+	componentWillReceiveProps(nextProps) {
+		console.log('Received props');
+		if(nextProps.weather !== this.state.weatherData) {
+			this.setState({
+				weatherData: nextProps.weather
+			              })
+		}
+	}
 
 	renderTheChart(temps, hours) {
 		const ctx = document.getElementById("myChart").getContext('2d');
@@ -14,7 +30,7 @@ class WeatherChart extends Component {
 					{
 						label          : 'Temperature For Five Days',
 						data           : temps,
-						backgroundColor: 'rgba(214,240,255,1)',
+						backgroundColor: 'rgba(68,141,201,1)',
 						borderColor    : 'rgba(68,141,201,1)',
 						borderWidth    : 3
 					}
@@ -22,15 +38,39 @@ class WeatherChart extends Component {
 			},
 			options: {
 				maintainAspectRatio: false,
+				legend             : {
+					display: true,
+					labels : {
+						fontColor: '#ffff'
+					}
+				},
 				scales             : {
 					yAxes: [
 						{
-							display: true,
-							ticks  : {
+							display  : true,
+							ticks    : {
 								beginAtZero: true,
-								fontSize   : 15
+								fontSize   : 15,
+								fontColor  : '#ffff'
+							},
+							gridLines: {
+								display: true,
+								color  : "#505050"
 							}
 						}
+					],
+					xAxes: [
+						{
+							display  : true,
+							ticks    : {
+								fontColor: '#ffff'
+							},
+							gridLines: {
+								display: true,
+								color  : "#505050"
+							}
+						}
+
 					]
 				}
 			}
@@ -38,11 +78,10 @@ class WeatherChart extends Component {
 	}
 
 	render() {
-
+console.log(this.state.weatherData);
 		if(this.props.weather !== null){
-			console.log(this.props.weather);
-			const temps = this.props.weather.map(day => day.main.temp - 273.15);
-			const daysOfTheWeek = this.props.weather.map(day => {
+			const temps = this.state.weatherData.map(day => day.main.temp - 273.15);
+			const daysOfTheWeek = this.state.weatherData.map(day => {
 				let formattedDaytesOfTheWeek = Moment.unix(day.dt).format('Do');
 
 				return formattedDaytesOfTheWeek;
@@ -56,4 +95,8 @@ class WeatherChart extends Component {
 	}
 }
 
-export default WeatherChart;
+function mpStateToProps({weather}) {
+	return {weather}
+}
+
+export default connect(mpStateToProps, null)(WeatherChart);
