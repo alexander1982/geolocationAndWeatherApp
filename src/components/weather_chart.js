@@ -1,25 +1,37 @@
 import React, { Component } from 'react';
 const Chart = require('chart.js');
 const Moment = require('moment');
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
+
+import $ from 'jquery';
 
 class WeatherChart extends Component {
-constructor(props) {
-	super(props);
+	constructor(props) {
+		super(props);
 
-	this.state = {
-		weatherData: []
-	};
-}
+		this.state = {
+			weatherData: null
+		};
+	}
+
+	componentDidMount() {
+		this.setState({
+			              weatherData: this.props.weather
+		              })
+	}
+
 	componentWillReceiveProps(nextProps) {
-		console.log('Received props');
-		if(nextProps.weather !== this.state.weatherData) {
+		if(nextProps.weather !== this.state.weatherData){
 			this.setState({
-				weatherData: nextProps.weather
+				              weatherData: nextProps.weather
 			              })
 		}
 	}
-
+componentWillUnmount() {
+	this.setState({
+		weatherData: []
+	              })
+}
 	renderTheChart(temps, hours) {
 		const ctx = document.getElementById("myChart").getContext('2d');
 		var myChart = new Chart(ctx, {
@@ -30,9 +42,9 @@ constructor(props) {
 					{
 						label          : 'Temperature For Five Days',
 						data           : temps,
-						backgroundColor: 'rgba(68,141,201,1)',
-						borderColor    : 'rgba(68,141,201,1)',
-						borderWidth    : 3
+						backgroundColor: '#ffff',
+						borderColor    : 'rgba(1, 33, 81, 1)',
+						borderWidth    : 2
 					}
 				]
 			},
@@ -78,8 +90,8 @@ constructor(props) {
 	}
 
 	render() {
-console.log(this.state.weatherData);
-		if(this.props.weather !== null){
+		console.log('Received props', this.state.weatherData);
+		if(this.state.weatherData !== null){
 			const temps = this.state.weatherData.map(day => day.main.temp - 273.15);
 			const daysOfTheWeek = this.state.weatherData.map(day => {
 				let formattedDaytesOfTheWeek = Moment.unix(day.dt).format('Do');
@@ -89,14 +101,15 @@ console.log(this.state.weatherData);
 
 			this.renderTheChart(temps, daysOfTheWeek);
 		}
+
 		return (
 		<canvas id="myChart" ref="myChart"></canvas>
 		)
 	}
 }
 
-function mpStateToProps({weather}) {
-	return {weather}
+function mpStateToProps({ weather }) {
+	return { weather }
 }
 
 export default connect(mpStateToProps, null)(WeatherChart);

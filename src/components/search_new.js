@@ -50,7 +50,7 @@ class SearchNew extends Component {
 				label="Country"
 				name="country"
 				component={this.renderField}/>
-				<button type="submit" className="btn-lg btn-block btn-primary submit-style"><span className="submit-inner-html">Search</span>
+				<button type="submit" className="btn-lg btn-block btn-primary submit-style box-shadow-bright"><span className="submit-inner-html button-text-shadow">Search</span>
 				</button>
 			</form>
 		</div>

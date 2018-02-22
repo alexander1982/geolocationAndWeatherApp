@@ -18,15 +18,6 @@ let $ = require('jquery');
 window.jQuery = $;
 window.$ = window.jQuery;
 
-window.onload = function() {
-	if (window.$) {
-		// jQuery is loaded
-		alert("Yeah!");
-	} else {
-		// jQuery is not loaded
-		alert("Doesn't Work");
-	}
-};
 ReactDOM.render(
 	<Provider store={store}>
 		<BrowserRouter>

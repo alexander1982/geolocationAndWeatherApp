@@ -11,7 +11,7 @@ class GoogleMap extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		console.log('zdadasdsad',nextProps.location.data);
+
 		if(nextProps.location.data.results[0].geometry.location !== this.state.locationData) {
 			this.setState({
 				              locationData: nextProps.location.data.results[0].geometry.location
@@ -43,8 +43,7 @@ class GoogleMap extends Component {
 
 		let lat = parseFloat(this.props.location.data.results[0].geometry.location.lat);
 		let lng = parseFloat(this.props.location.data.results[0].geometry.location.lng);
-
-		console.log('saadsad',this.state.locationData);
+		
 		this.props.fetchWeather({lat, lng});
 		this.map = new google.maps.Map(this.refs.map, {
 			zoom  : 16,

@@ -36,8 +36,6 @@ export function fetchWeather(values) {
 	error => {toggleModalAction()}
 	);
 
-	console.log('Action fetchWeather ',request);
-
 	return {
 		type   : FETCH_WEATHER,
 		payload: request
