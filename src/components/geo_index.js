@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchGeoLocation, toggleModalAction } from '../actions/index';
+import { cleanState, fetchGeoLocation, toggleModalAction } from '../actions/index';
 
 import GoogleMap from './google_map';
 import WeatherInfo from '../containers/weatherInfo';
@@ -18,7 +18,7 @@ class GeoIndex extends Component {
 
 	renderMap() {
 		console.log('From index',this.props.location);
-		if(this.props.location.data == null){
+		if(this.props.location == null){
 			return (
 			<div>
 				<img className="img-fluid gif-margin" src="http://cdn.ebaumsworld.com/mediaFiles/picture/416301/83779543.gif"/>
@@ -28,11 +28,12 @@ class GeoIndex extends Component {
 
 		if(this.props.toggleModal === true) {
 			this.renderModal();
+			this.props.cleanState();
 		}
 
 
 
-		if(this.props.location.data.results.length) {
+		if(this.props.location !== null && this.props.location.data.results.length) {
 			return (<GoogleMap />)
 		} else {
 			return (
@@ -44,7 +45,7 @@ class GeoIndex extends Component {
 
 	}
 	renderWeatherInfo(){
-		if(this.props.location.data && this.props.location.data.results && this.props.location.data.results.length) {
+		if(this.props.location !== null && this.props.location.data && this.props.location.data.results && this.props.location.data.results.length) {
 			return (
 			<WeatherInfo weather={this.props.weather}/>
 			)
@@ -54,7 +55,7 @@ class GeoIndex extends Component {
 		)
 	}
 	renderChart(){
-		if(this.props.location.data && this.props.location.data.results && this.props.location.data.results.status !== 'ZERO_RESULTS') {
+		if(this.props.location !== null && this.props.location.data && this.props.location.data.results && this.props.location.data.results.status !== 'ZERO_RESULTS') {
 			return (
 			<WeatherChart weather={this.props.weather}/>
 			)
@@ -132,4 +133,4 @@ function mapStateToProps({ location, weather, form, toggleModal }) {
 	return { location, weather, form, toggleModal };
 }
 
-export default connect(mapStateToProps, { fetchGeoLocation, toggleModalAction })(GeoIndex);
+export default connect(mapStateToProps, { cleanState, fetchGeoLocation, toggleModalAction })(GeoIndex);

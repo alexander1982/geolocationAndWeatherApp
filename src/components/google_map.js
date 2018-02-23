@@ -12,7 +12,7 @@ class GoogleMap extends Component {
 
 	componentWillReceiveProps(nextProps) {
 
-		if(nextProps.location.data.results[0].geometry.location !== this.state.locationData) {
+		if(nextProps.location !== null && nextProps.location.data.results[0].geometry.location !== this.state.locationData) {
 			this.setState({
 				              locationData: nextProps.location.data.results[0].geometry.location
 			              });

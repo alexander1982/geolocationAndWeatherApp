@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Field, reduxForm, reset, change } from 'redux-form';
 import { connect } from 'react-redux';
-import { fetchGeoLocation } from '../actions/index';
+import { fetchGeoLocation, cleanState } from '../actions/index';
+
+import logo from '../../assets/images/earth_logo.png';
 
 class SearchNew extends Component {
 	constructor(props) {
@@ -9,6 +11,7 @@ class SearchNew extends Component {
 	}
 
 	onFormSubmit(values) {
+		this.props.cleanState();
 		this.props.fetchGeoLocation(values);
 		
 	}
@@ -35,7 +38,16 @@ class SearchNew extends Component {
 
 		return (
 		<div>
-			<h4>Locate the weather</h4>
+			<div className="container">
+				<div className="row">
+					<div className="col-10 col-sm-10 col-lg-10 padding-none">
+						<h4>Locate the weather</h4>
+					</div>
+					<div className="col-2 col-sm-2 col-lg-2 padding-none">
+						<img src={logo} className="logo img-rounded img-fluid"/>
+					</div>
+				</div>
+			</div>
 			<hr/>
 			<form className="street-margin" onSubmit={handleSubmit(this.onFormSubmit.bind(this))}>
 				<Field
@@ -88,4 +100,4 @@ export default reduxForm({
 	                         validate,
 	                         form           : 'NewSearchForm',
 	                         onSubmitSuccess: afterSubmit,
-                         })(connect(null, { fetchGeoLocation })(SearchNew))
+                         })(connect(null, { fetchGeoLocation, cleanState })(SearchNew))

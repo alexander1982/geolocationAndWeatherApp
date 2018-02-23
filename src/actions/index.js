@@ -5,6 +5,7 @@ import {store} from '../index';
 const BASE_URL = 'https://maps.googleapis.com/maps/api/geocode/json';
 const API_KEY = 'AIzaSyDf_5digH9UCB2VteRH4N-UhZRi4HFiakw';
 
+export const CLEAN_STATE = 'clean_state';
 export const FETCH_GEOLOCATION = 'fetch_geoLocation';
 export const FETCH_WEATHER = 'fetch_weather';
 export const TOGGLE_MODAL = 'toggle_modal';
@@ -45,5 +46,11 @@ export function fetchWeather(values) {
 export function toggleModalAction() {
 	return {
 		type: TOGGLE_MODAL
+	}
+}
+
+export function cleanState() {
+	return {
+		type: CLEAN_STATE
 	}
 }

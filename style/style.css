@@ -13,6 +13,7 @@ h4{
     font-family: Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif;
     font-weight: 400;
     margin: 0;
+    padding: 0;
 }
 
 h6{
@@ -21,6 +22,10 @@ h6{
 
 h6.weather-info-h6{
     margin: 0;
+}
+
+.padding-none {
+    padding: 0;
 }
 
 .center-content{
@@ -43,6 +48,7 @@ h6.weather-info-h6{
 
 input.form-control{
     height: 1.5rem !important;
+    box-shadow: inset 0 0 10px rgb(60, 61, 54) !important;
 }
 
 input.input-inner-text{
@@ -54,7 +60,7 @@ input.input-inner-text{
 
 /*This code disables the default input background color*/
 input:-webkit-autofill{
-    -webkit-box-shadow: inset 0 0 0 9999px white;
+    -webkit-box-shadow: inset 0 0 10px rgb(66, 67, 58) !important;
 }
 
 /*End of the code which disables the default input background color*/
@@ -64,6 +70,11 @@ body{
 
 h1{
     font-size: 1.6em;
+}
+
+.logo {
+    height: 2rem;
+    width: 2rem;
 }
 
 .text-font-size{
@@ -107,19 +118,17 @@ div.column-mutual-css{
     height: 16vh;
 }
 
-.form-width{
-    padding: 2%;
-}
+
 
 .map-width{
-    box-shadow: inset 0 0 1px rgb(180, 181, 165);
+    /*box-shadow: inset 0 0 1px rgb(180, 181, 165);*/
     border-radius: 0.5%;
     background: #141414;
 }
 
 .search-width{
-    box-shadow: inset 0 0 1px rgb(180, 181, 165);
-    padding: 1% 2% 1% 2%;
+    /*box-shadow: inset 0 0 1px rgb(180, 181, 165);*/
+    padding: 1% 0.5% 1% 2%;
     border-radius: 1%;
     background: #141414;
 }
@@ -165,17 +174,17 @@ span.submit-inner-html:hover{
 
 .chart-and-graph-background-right{
     background: #141414;
-    box-shadow: inset 0 0 1px rgb(180, 181, 165);
+    /*box-shadow: inset 0 0 1px rgb(180, 181, 165);*/
     border-radius: 0.5%;
     color: #ffffff;
 }
 
 .chart-and-graph-background-left{
     background: #141414;
-    box-shadow: inset 0 0 1px rgb(180, 181, 165);
+    /*box-shadow: inset 0 0 1px rgb(180, 181, 165);*/
     border-radius: 0.5%;
     color: #ffffff;
-    padding: 0 1.5rem 0 1.5rem !important;
+    padding: 0 1.5rem 0 3rem !important;
 }
 
 form label{
@@ -187,6 +196,9 @@ form label{
 .search-input{
     font-size: 0.8rem;
     margin: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    box-shadow: inset 0 0 1px rgb(180, 181, 165);
 }
 
 div.form-group{
@@ -282,12 +294,19 @@ select:-webkit-autofill:focus{
 }
 
 div#weather-thumbnail{
+    display: flex;
+    justify-content: center;
+    align-content: center;
     background: linear-gradient(to bottom, rgba(20, 20, 20, 1) 3%, rgba(0, 17, 43, 1) 10%, rgba(1, 33, 81, 1) 30%, rgba(1, 33, 81, 1) 70%, rgba(0, 17, 43, 1) 90%, rgba(0, 17, 43, 1) 90%, rgba(20, 20, 20, 1) 97%);
-    padding-top: 8%;
 }
 
 .img-fluid{
     box-shadow: 1px 2px 10px black;
+}
+
+.weather-image-height {
+    height: 6rem;
+    align-self: center;
 }
 
 span.now-weather{
@@ -313,7 +332,7 @@ span.now-weather{
 }
 
 .padding-top-1rem{
-    padding-top: 1rem!important;
+    padding-top: 0.5rem!important;
 }
 
 .display-none {

@@ -94,7 +94,7 @@ class RenderGraph extends Component {
 
 			<div className="col-lg-4 col-sm-4 col-4 text-center" id="weather-thumbnail">
 				<img src={weatherImage}
-				     className="img-fluid img-thumbnail"/>
+				     className="img-fluid img-thumbnail weather-image-height"/>
 			</div>
 		</div>
 		)
