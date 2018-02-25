@@ -17,7 +17,6 @@ class GeoIndex extends Component {
 	}
 
 	renderMap() {
-		console.log('From index',this.props.location);
 		if(this.props.location == null){
 			return (
 			<div>
@@ -55,7 +54,7 @@ class GeoIndex extends Component {
 		)
 	}
 	renderChart(){
-		if(this.props.location !== null && this.props.location.data && this.props.location.data.results && this.props.location.data.results.status !== 'ZERO_RESULTS') {
+		if(this.props.location !== null && this.props.location.data && this.props.location.data.results && this.props.location.data.results.length) {
 			return (
 			<WeatherChart weather={this.props.weather}/>
 			)

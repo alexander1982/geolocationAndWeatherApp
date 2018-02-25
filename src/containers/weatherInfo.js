@@ -13,8 +13,7 @@ const day_light_snow = './images/day_light_snow.png';
 const overcast_clouds = './images/overcast_clouds.png';
 
 
-console.log('From weatherInfo ','./overcast_clouds.png');
-class RenderGraph extends Component {
+class WeatherInfo extends Component {
 	constructor(props) {
 		super(props);
 		this.state = { weather: null }
@@ -68,7 +67,7 @@ class RenderGraph extends Component {
 
 		return (
 		<div className="row graph">
-			<div className="col-lg-8 col-sm-8 col-8 no-padding padding-top-1rem">
+			<div className="col-lg-8 col-sm-8 col-7 no-padding padding-top-1rem">
 
 				<div className="col-sm-12 col-lg-12 col-12 search-margin no-padding">
 					<label className="text-font-size"><h6 className="weather-info-h6">Weather:</h6></label>
@@ -92,7 +91,7 @@ class RenderGraph extends Component {
 				</div>
 			</div>
 
-			<div className="col-lg-4 col-sm-4 col-4 text-center" id="weather-thumbnail">
+			<div className="col-lg-4 col-sm-4 col-5 text-center" id="weather-thumbnail">
 				<img src={weatherImage}
 				     className="img-fluid img-thumbnail weather-image-height"/>
 			</div>
@@ -101,4 +100,8 @@ class RenderGraph extends Component {
 	}
 }
 
-export default RenderGraph;
+export default WeatherInfo;
+
+
+
+

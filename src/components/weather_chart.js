@@ -23,13 +23,13 @@ class WeatherChart extends Component {
 	componentWillReceiveProps(nextProps) {
 		if(nextProps.weather !== this.state.weatherData){
 			this.setState({
-				              weatherData: nextProps.weather
+				              weatherData: this.props.weather
 			              })
 		}
 	}
 componentWillUnmount() {
 	this.setState({
-		weatherData: []
+		weatherData: null
 	              })
 }
 	renderTheChart(temps, hours) {
@@ -90,10 +90,9 @@ componentWillUnmount() {
 	}
 
 	render() {
-		console.log('Received props', this.state.weatherData);
-		if(this.state.weatherData !== null){
-			const temps = this.state.weatherData.map(day => day.main.temp - 273.15);
-			const daysOfTheWeek = this.state.weatherData.map(day => {
+		if(this.props.weather !== null){
+			const temps = this.props.weather.map(day => day.main.temp - 273.15);
+			const daysOfTheWeek = this.props.weather.map(day => {
 				let formattedDaytesOfTheWeek = Moment.unix(day.dt).format('Do');
 
 				return formattedDaytesOfTheWeek;

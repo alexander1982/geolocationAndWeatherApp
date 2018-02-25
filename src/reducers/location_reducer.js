@@ -5,7 +5,7 @@ export default function(state = null , action) {
 		case FETCH_GEOLOCATION:
 			return action.payload;
 		case CLEAN_STATE:
-			return state = null;
+			return null;
 		default:
 			return state;
 	}
