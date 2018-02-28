@@ -9,6 +9,7 @@ export const CLEAN_STATE = 'clean_state';
 export const FETCH_GEOLOCATION = 'fetch_geoLocation';
 export const FETCH_WEATHER = 'fetch_weather';
 export const TOGGLE_MODAL = 'toggle_modal';
+export const TOGGLE_NAV_BAR = 'toggle_nav_bar';
 
 export function fetchGeoLocation(values) {
 	const url = `${BASE_URL}?address=${values.street},+${values.city},+${values.country}&key=${API_KEY}`;
@@ -17,9 +18,10 @@ export function fetchGeoLocation(values) {
 		if(response.data.status !== 'OK') {
 		store.dispatch(toggleModalAction());
 	}
+		console.log('Fetch Geo result', response);
 		return response
 	},
-	error => {store.dispatch(toggleModalAction());}
+	error => {console.log(error);}
 	);
 
 	return {
@@ -34,7 +36,7 @@ export function fetchWeather(values) {
 	const url = `${OPEN_WEATHER_BASE_URL}?lat=${values.lat}&lon=${values.lng}&appid=${OPEN_WEATHER_API_KEY}`;
 	const request = axios.get(url).then(
 	response => response,
-	error => {toggleModalAction()}
+	error => {console.log(error)}
 	);
 
 	return {
@@ -52,5 +54,11 @@ export function toggleModalAction() {
 export function cleanState() {
 	return {
 		type: CLEAN_STATE
+	}
+}
+
+export function toggleNavBarAction() {
+	return {
+		type: TOGGLE_NAV_BAR
 	}
 }

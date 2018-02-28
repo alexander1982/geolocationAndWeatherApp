@@ -11,7 +11,7 @@ class SearchNew extends Component {
 	}
 
 	onFormSubmit(values) {
-		this.props.cleanState();
+		//this.props.cleanState();
 		this.props.fetchGeoLocation(values);
 		
 	}
@@ -51,16 +51,16 @@ class SearchNew extends Component {
 			<hr/>
 			<form className="dropdown-padding" onSubmit={handleSubmit(this.onFormSubmit.bind(this))}>
 				<Field
-				label="Street"
-				name="street"
+				label="Country"
+				name="country"
 				component={this.renderField}/>
 				<Field
 				label="City"
 				name="city"
 				component={this.renderField}/>
 				<Field
-				label="Country"
-				name="country"
+				label="Street"
+				name="street"
 				component={this.renderField}/>
 				<button type="submit" className="btn-lg btn-block btn-primary submit-style box-shadow-bright"><span className="submit-inner-html button-text-shadow">Search</span>
 				</button>

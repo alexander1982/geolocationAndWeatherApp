@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { cleanState, fetchGeoLocation, toggleModalAction } from '../actions/index';
+import { cleanState, fetchGeoLocation, toggleModalAction, toggleNavBarAction } from '../actions/index';
+
+import tapOrClick from 'react-tap-or-click';
 
 import GoogleMap from './google_map';
 import WeatherInfo from '../containers/weatherInfo';
@@ -11,8 +13,18 @@ import NavBar from './nav_bar';
 import $ from 'jquery';
 
 class GeoIndex extends Component {
+
+	constructor(props) {
+		super(props);
+		this.toggleModalHere = this.toggleModalHere.bind(this);
+	}
+
+	toggleModalHere() {
+		this.props.toggleModalAction();
+	}
+
 	renderModal() {
-		$('body').append('<button id="modalButton" type="button" class="btn btn-primary btn-lg display-none" data-toggle="modal" data-target="#exampleModalCenter"/>');
+		$('body').append('<button id="modalButton" type="button" className="btn btn-primary btn-lg display-none" data-toggle="modal" data-target="#exampleModalCenter"/>');
 		$('#modalButton').click();
 	}
 
@@ -27,6 +39,7 @@ class GeoIndex extends Component {
 
 		if(this.props.toggleModal === true) {
 			this.renderModal();
+			this.props.toggleNavBarAction();
 			this.props.cleanState();
 		}
 
@@ -54,7 +67,7 @@ class GeoIndex extends Component {
 		)
 	}
 	renderChart(){
-		if(this.props.location !== null && this.props.location.data && this.props.location.data.results && this.props.location.data.results.length) {
+		if(this.props.location !== null && this.props.location.data.status !== 'ZERO_RESULTS') {
 			return (
 			<WeatherChart weather={this.props.weather}/>
 			)
@@ -65,7 +78,6 @@ class GeoIndex extends Component {
 	}
 
 	render() {
-
 		return (
 		<div className="container-fluid">
 
@@ -78,7 +90,7 @@ class GeoIndex extends Component {
 				<div className="col-sm-3 col-lg-3 hidden-lg-down">
 
 				</div>
-				<div className="col-sm-2 col-12 hidden-sm-up">
+				<div className="col-sm-2 col-12 hidden-sm-up" id="navBarContainer">
 					<NavBar/>
 				</div>
 				<div className="col-sm-4 col-lg-2 col-12 hidden-xs-down form-width search-width">
@@ -115,9 +127,7 @@ class GeoIndex extends Component {
 							<h6>Please check the names of Street, City and Country.</h6>
 						</div>
 						<div className="modal-footer">
-							<button type="button" className="btn btn-primary" data-dismiss="modal" onClick={() => {
-							this.props.toggleModalAction();
-							}}>Close</button>
+							<button type="button" className="btn btn-primary" data-dismiss="modal" onClick={this.toggleModalHere}>Close</button>
 						</div>
 					</div>
 				</div>
@@ -128,8 +138,8 @@ class GeoIndex extends Component {
 		)
 	}
 }
-function mapStateToProps({ location, weather, form, toggleModal }) {
-	return { location, weather, form, toggleModal };
+function mapStateToProps({ location, weather, form, toggleModal, toggleNavBar }) {
+	return { location, weather, form, toggleModal, toggleNavBar };
 }
 
-export default connect(mapStateToProps, { cleanState, fetchGeoLocation, toggleModalAction })(GeoIndex);
+export default connect(mapStateToProps, { cleanState, fetchGeoLocation, toggleModalAction, toggleNavBarAction })(GeoIndex);

@@ -21,72 +21,78 @@ class WeatherChart extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if(nextProps.weather !== this.state.weatherData){
 			this.setState({
-				              weatherData: this.props.weather
+				              weatherData: nextProps.weather
 			              })
-		}
+
+}
+
+	componentWillUpdate(nextProps, nextState) {
+		console.log(nextProps, nextState);
 	}
+
 componentWillUnmount() {
 	this.setState({
 		weatherData: null
 	              })
 }
 	renderTheChart(temps, hours) {
-		const ctx = document.getElementById("myChart").getContext('2d');
-		var myChart = new Chart(ctx, {
-			type   : 'bar',
-			data   : {
-				labels  : hours,
-				datasets: [
-					{
-						label          : 'Temperature For Five Days',
-						data           : temps,
-						backgroundColor: '#ffff',
-						borderColor    : 'rgba(1, 33, 81, 1)',
-						borderWidth    : 2
-					}
-				]
-			},
-			options: {
-				maintainAspectRatio: false,
-				legend             : {
-					display: true,
-					labels : {
-						fontColor: '#ffff'
-					}
-				},
-				scales             : {
-					yAxes: [
+		$('document').ready(() => {
+			const ctx = document.getElementById("myChart").getContext('2d');
+			var myChart = new Chart(ctx, {
+				type   : 'bar',
+				data   : {
+					labels  : hours,
+					datasets: [
 						{
-							display  : true,
-							ticks    : {
-								beginAtZero: true,
-								fontSize   : 15,
-								fontColor  : '#ffff'
-							},
-							gridLines: {
-								display: true,
-								color  : "#505050"
-							}
+							label          : 'Temperature For Five Days',
+							data           : temps,
+							backgroundColor: '#ffff',
+							borderColor    : 'rgba(1, 33, 81, 1)',
+							borderWidth    : 2
 						}
-					],
-					xAxes: [
-						{
-							display  : true,
-							ticks    : {
-								fontColor: '#ffff'
-							},
-							gridLines: {
-								display: true,
-								color  : "#505050"
-							}
-						}
-
 					]
+				},
+				options: {
+					maintainAspectRatio: false,
+					legend             : {
+						display: true,
+						labels : {
+							fontColor: '#ffff'
+						}
+					},
+					scales             : {
+						yAxes: [
+							{
+								display  : true,
+								ticks    : {
+									beginAtZero: true,
+									fontSize   : 15,
+									fontColor  : '#ffff'
+								},
+								gridLines: {
+									display: true,
+									color  : "#505050"
+								}
+							}
+						],
+						xAxes: [
+							{
+								display  : true,
+								ticks    : {
+									fontColor: '#ffff'
+								},
+								gridLines: {
+									display: true,
+									color  : "#505050"
+								}
+							}
+
+						]
+					}
 				}
-			}
-		});
+			});
+		})
 	}
 
 	render() {
@@ -97,7 +103,7 @@ componentWillUnmount() {
 
 				return formattedDaytesOfTheWeek;
 			});
-
+console.log('For glory ',temps, daysOfTheWeek);
 			this.renderTheChart(temps, daysOfTheWeek);
 		}
 

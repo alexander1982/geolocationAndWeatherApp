@@ -2,15 +2,30 @@ import React, { Component } from 'react';
 
 import { Field, reduxForm, reset, change } from 'redux-form';
 import { connect } from 'react-redux';
-import { fetchGeoLocation, cleanState } from '../actions/index';
+import { fetchGeoLocation, toggleNavBarAction } from '../actions/index';
 
+import $ from 'jquery';
 
 class NavBar extends Component {
+	constructor(props) {
+		super(props);
+		this.toggleNav = this.toggleNav.bind(this);
+	}
+
+	componentWillReceiveProps(newProps) {
+		console.log('hEY ', newProps.weather);
+		console.log('hEY2 ', this.props.weather);
+		if(newProps.location !== null && newProps.weather !== null && this.props.weather == null && !this.props.toggleNavBar || newProps.weather !== this.props.weather){
+			$('#navbarDropdownMenuLink').click();
+		}
+	}
 
 	onFormSubmit(values) {
-		this.props.cleanState();
 		this.props.fetchGeoLocation(values);
+	}
 
+	toggleNav() {
+		this.props.toggleNavBarAction();
 	}
 
 	renderField(field) {
@@ -29,15 +44,19 @@ class NavBar extends Component {
 		</div>
 		)
 	}
-	
+
 	render() {
 		const { handleSubmit } = this.props;
+
 		return (
 
 		<nav className="navbar navbar-expand-lg navbar-dark indigo">
 			<button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
 			        aria-controls="navbarSupportedContent"
-			        aria-expanded="false" aria-label="Toggle navigation"><span className="navbar-toggler-icon"></span></button>
+			        aria-expanded="false" aria-label="Toggle navigation"
+			        id="nav-toggler"
+			        onClick={() => {this.toggleNav()}}
+			><span className="navbar-toggler-icon"></span></button>
 
 			<div className="collapse navbar-collapse" id="navbarSupportedContent">
 
@@ -49,7 +68,7 @@ class NavBar extends Component {
 						<a className="nav-link" href="#">Features</a>
 					</li>
 					<li className="nav-item dropdown">
-						<a className="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown"
+						<a className="nav-link dropdown-toggle" data-toggle="dropdown"
 						   aria-haspopup="true" aria-expanded="false">My Locations</a>
 						<div className="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
 							<a className="dropdown-item" href="#"><h6 className="color-white">Some Location</h6></a>
@@ -57,27 +76,36 @@ class NavBar extends Component {
 					</li>
 
 					<li className="nav-item dropdown">
-						<a className="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown"
-						   aria-haspopup="true" aria-expanded="false">New Search</a>
+						<a className="nav-link dropdown-toggle" data-toggle="dropdown"
+						   aria-expanded="false"><button
+						className="dropdown-toggle btn btn-outline" type="button" id="newSearch"
+						aria-expanded="false"
+						onClick={() => {this.toggleNav()}}
+						>New Search</button></a>
 						<div className="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
 							<a className="dropdown-item" href="#">
-								<button className="navbar-toggler float-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-								        aria-controls="navbarSupportedContent"
-								        aria-expanded="false" aria-label="Toggle navigation"><i class="fa fa-times"></i></button>
+								<button
+								id="navbarDropdownMenuLink"
+								className="dropdown-toggle float-right" type="button" data-toggle="dropdown"
+								aria-expanded="false"
+								aria-haspopup="true"
+								onClick={() => {this.toggleNav()}}
+								><i className="fa fa-times"></i></button>
 								<form className="street-margin" onSubmit={handleSubmit(this.onFormSubmit.bind(this))}>
 									<Field
-									label="Street"
-									name="street"
+									label="Country"
+									name="country"
 									component={this.renderField}/>
 									<Field
 									label="City"
 									name="city"
 									component={this.renderField}/>
 									<Field
-									label="Country"
-									name="country"
+									label="Street"
+									name="street"
 									component={this.renderField}/>
-									<button type="submit" className="btn-lg btn-block btn-primary submit-style box-shadow-bright"><span className="submit-inner-html button-text-shadow">Search</span>
+									<button type="submit" className="btn-lg btn-block btn-primary submit-style box-shadow-bright"><span
+									className="submit-inner-html button-text-shadow">Search</span>
 									</button>
 								</form>
 							</a>
@@ -104,7 +132,7 @@ function validate(values) {
 		errors.country = 'Add a country name'
 	}
 
-	if(!values.street && !values.city && !values.country) {
+	if(!values.street && !values.city && !values.country){
 
 	}
 
@@ -117,8 +145,12 @@ const afterSubmit = (result, dispatch) => {
 	dispatch(change('NewSearchForm_Nav_Bar', 'country', ''));
 };
 
+function mapStateToProps({ toggleNavBar, weather, location }) {
+	return { toggleNavBar, weather, location };
+}
+
 export default reduxForm({
 	                         validate,
 	                         form           : 'NewSearchForm_Nav_Bar',
 	                         onSubmitSuccess: afterSubmit
-                         })(connect(null, { fetchGeoLocation, cleanState })(NavBar))
+                         })(connect(mapStateToProps, { fetchGeoLocation, toggleNavBarAction })(NavBar))

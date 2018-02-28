@@ -12,7 +12,7 @@ class GoogleMap extends Component {
 
 	componentWillReceiveProps(nextProps) {
 
-		if(nextProps.location !== null && nextProps.location.data.results[0].geometry.location !== this.state.locationData) {
+		if(nextProps.location !== null && nextProps.location.data && nextProps.location.data.results[0].geometry.location !== this.state.locationData) {
 			this.setState({
 				              locationData: nextProps.location.data.results[0].geometry.location
 			              });
@@ -37,33 +37,35 @@ class GoogleMap extends Component {
 	}
 
 	componentDidMount() {
-		this.setState({
-			              locationData: this.props.location.data.results[0].geometry.location
-		              });
+		if(this.props.location !== null && this.props.location.data.results.length) {
+			this.setState({
+				              locationData: this.props.location.data.results[0].geometry.location
+			              });
 
-		let lat = parseFloat(this.props.location.data.results[0].geometry.location.lat);
-		let lng = parseFloat(this.props.location.data.results[0].geometry.location.lng);
-		
-		this.props.fetchWeather({lat, lng});
-		this.map = new google.maps.Map(this.refs.map, {
-			zoom  : 16,
-			center: { lat: lat, lng: lng }
-		});
+			let lat = parseFloat(this.props.location.data.results[0].geometry.location.lat);
+			let lng = parseFloat(this.props.location.data.results[0].geometry.location.lng);
 
-		this.marker = new google.maps.Marker({
-			position: { lat: lat, lng: lng },
-			map     : this.map,
-			title   : 'You'
-		});
-		this.panorama = new google.maps.StreetViewPanorama(
-		document.getElementById('map'), {
-			position: { lat: lat, lng: lng },
-			pov     : {
-				heading: 34,
-				pitch  : 10
-			}
-		});
-		this.map.setStreetView(this.panorama);
+			this.props.fetchWeather({lat, lng});
+			this.map = new google.maps.Map(this.refs.map, {
+				zoom  : 16,
+				center: { lat: lat, lng: lng }
+			});
+
+			this.marker = new google.maps.Marker({
+				position: { lat: lat, lng: lng },
+				map     : this.map,
+				title   : 'You'
+			});
+			this.panorama = new google.maps.StreetViewPanorama(
+			document.getElementById('map'), {
+				position: { lat: lat, lng: lng },
+				pov     : {
+					heading: 34,
+					pitch  : 10
+				}
+			});
+			this.map.setStreetView(this.panorama);
+		}
 	}
 
 	render() {

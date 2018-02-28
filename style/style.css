@@ -396,3 +396,15 @@ a.dropdown-item {
 nav.navbar {
     background: #141414!important;
 }
+
+div#navBarContainer {
+    padding: 0;
+}
+
+a.nav-link.dropdown-toggle::after {
+    display: none;
+}
+button#newSearch {
+    background: #141414!important;
+    font-family: Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif;
+}
