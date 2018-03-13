@@ -39,7 +39,6 @@ class GeoIndex extends Component {
 
 		if(this.props.toggleModal === true) {
 			this.renderModal();
-			this.props.toggleNavBarAction();
 			this.props.cleanState();
 		}
 
@@ -78,6 +77,7 @@ class GeoIndex extends Component {
 	}
 
 	render() {
+		
 		return (
 		<div className="container-fluid">
 

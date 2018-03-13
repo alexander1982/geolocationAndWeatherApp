@@ -17,6 +17,7 @@ class NavBar extends Component {
 		console.log('hEY2 ', this.props.weather);
 		if(newProps.location !== null && newProps.weather !== null && this.props.weather == null && !this.props.toggleNavBar || newProps.weather !== this.props.weather){
 			$('#navbarDropdownMenuLink').click();
+			$('#nav-toggler').click();
 		}
 	}
 

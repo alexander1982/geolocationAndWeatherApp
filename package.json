@@ -4,7 +4,7 @@
   "description": "Find places on google map and the weather",
   "main": "index.js",
   "scripts": {
-    "build": "set NODE_ENV=production && npm run clean && webpack",
+    "build": "webpack -p --define process.env.NODE_ENV='\"production\"' --progress --colors",
     "clean": "rimraf dist",
     "test": "echo \"Error: no test specified\" && exit 1",
     "serve": "webpack-dev-server"
@@ -16,11 +16,17 @@
     "chart.js": "^2.7.1",
     "d3": "^4.12.2",
     "d3-scale": "^1.0.7",
+    "dotenv": "^5.0.1",
+    "dotenv-webpack": "^1.5.5",
+    "express": "^4.16.2",
+    "firebase": "^4.10.1",
+    "firebase-tools": "^3.17.5",
     "font-awesome": "^4.7.0",
     "font-awesome-webpack2": "0.0.6",
     "jquery": "^3.3.1",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.5",
     "moment": "^2.20.1",
+    "node-env-file": "^0.1.8",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-easy-chart": "^1.0.0",
@@ -38,6 +44,7 @@
     "babel-preset-env": "^1.6.1",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
+    "body-parser": "^1.18.2",
     "copy-webpack-plugin": "^4.4.1",
     "css-hot-loader": "^1.3.6",
     "css-loader": "^0.28.9",
@@ -49,6 +56,7 @@
     "jquery": "^3.3.1",
     "less": "^3.0.1",
     "less-loader": "^4.0.5",
+    "node-env-file": "^0.1.8",
     "path": "^0.12.7",
     "react-key-index": "^0.1.1",
     "redux-logger": "^3.0.6",
@@ -56,7 +64,8 @@
     "sass-loader": "^6.0.6",
     "style-loader": "^0.19.1",
     "url-loader": "^0.6.2",
-    "webpack": "^2.2.0-rc.0",
-    "webpack-dev-server": "^2.11.1"
+    "webpack": "^3.5.6",
+    "webpack-dev-server": "^2.7.1",
+    "webpack-dotenv-plugin": "^2.0.2"
   }
 }

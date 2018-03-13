@@ -2,6 +2,16 @@ const webpack = require('webpack');
 const htmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+let envFile = require('node-env-file');
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+
+try {
+	if(process.env.NODE_ENV === 'development'){
+		envFile(path.join(__dirname, 'config/' + process.env.NODE_ENV + '.env'));
+	}
+} catch(e) {
+	console.log(e);
+}
 
 const VENDOR_LIBS = [
 	"axios",
@@ -59,7 +69,7 @@ module.exports = {
 	},
 	plugins  : [
 		new webpack.ProvidePlugin({
-			$: 'jquery',
+			$     : 'jquery',
 			jQuery: 'jquery'
 		}),
 
@@ -70,7 +80,20 @@ module.exports = {
 			template: 'src/index.html'
 		}),
 		new webpack.DefinePlugin({
-			'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+			'process.env': {
+				NODE_ENV                    : JSON.stringify(process.env.NODE_ENV),
+				FIREBASE_API_KEY            : JSON.stringify(process.env.FIREBASE_API_KEY),
+				FIREBASE_AUTH_DOMAIN        : JSON.stringify(process.env.FIREBASE_AUTH_DOMAIN),
+				FIREBASE_DATABASE_URL       : JSON.stringify(process.env.FIREBASE_DATABASE_URL),
+				FIREBASE_PROJECT_ID         : JSON.stringify(process.env.FIREBASE_PROJECT_ID),
+				FIREBASE_STORAGE_BUCKET     : JSON.stringify(process.env.FIREBASE_STORAGE_BUCKET),
+				FIREBASE_MESSAGING_SENDER_ID: JSON.stringify(process.env.FIREBASE_MESSAGING_SENDER_ID),
+				GOOGLE_MAP_API_KEY          : JSON.stringify(process.env.GOOGLE_MAP_API_KEY),
+				OPEN_WEATHER_MAP_API_KEY    : JSON.stringify(process.env.OPEN_WEATHER_MAP_API_KEY),
+				EMAIL                       : JSON.stringify(process.env.EMAIL),
+				PASSWORD                    : JSON.stringify(process.env.PASSWORD)
+			}
+
 		}),
 		new CopyWebpackPlugin([
 			{ from: 'assets/images', to: path.join(__dirname, 'dist/images') }
@@ -80,5 +103,10 @@ module.exports = {
 		historyApiFallback: true,
 		contentBase       : path.join(__dirname, 'dist'),
 		port              : 8088
-	}
+	},
+	stats    : {
+		color: true
+	},
+	devtool  : 'source-map'
 };
+

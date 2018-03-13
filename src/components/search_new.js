@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Field, reduxForm, reset, change } from 'redux-form';
 import { connect } from 'react-redux';
-import { fetchGeoLocation, cleanState } from '../actions/index';
+import { fetchGeoLocation, cleanState, SignOut } from '../actions/index';
 
 import logo from '../../assets/images/earth_logo.png';
 
@@ -62,7 +62,7 @@ class SearchNew extends Component {
 				label="Street"
 				name="street"
 				component={this.renderField}/>
-				<button type="submit" className="btn-lg btn-block btn-primary submit-style box-shadow-bright"><span className="submit-inner-html button-text-shadow">Search</span>
+				<button onClick={() => {this.props.SignOut()}} type="submit" className="btn-lg btn-block btn-primary submit-style box-shadow-bright"><span className="submit-inner-html button-text-shadow">Search</span>
 				</button>
 			</form>
 		</div>
@@ -100,4 +100,4 @@ export default reduxForm({
 	                         validate,
 	                         form           : 'NewSearchForm',
 	                         onSubmitSuccess: afterSubmit
-                         })(connect(null, { fetchGeoLocation, cleanState })(SearchNew))
+                         })(connect(null, { fetchGeoLocation, cleanState,SignOut })(SearchNew))
