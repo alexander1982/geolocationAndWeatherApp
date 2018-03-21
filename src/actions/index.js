@@ -168,6 +168,7 @@ export function getMyLocations() {
 		console.log('Account linking error', error);
 		// Handle Errors here.
 		let errorCode = error.code;
+		console.log('Account linking error', error.code);
 		let errorMessage = error.message;
 		// The email of the user's account used.
 		let email = error.email;

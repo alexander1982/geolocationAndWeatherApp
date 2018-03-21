@@ -38,6 +38,11 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.static(publicPath));
+
+
+console.log(PublicPath);
+
+
 app.use(bodyParser.json());
 //Add User
 app.post('/users', (req, res) => {
