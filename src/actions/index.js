@@ -1,6 +1,7 @@
 import axios from 'axios';
 import firebase from 'firebase';
 import { store } from '../index';
+import $ from 'jquery';
 
 try {
 	let config = {
@@ -30,56 +31,48 @@ provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
 provider.addScope('profile');
 provider.addScope('email');
 
-firebase.auth().onAuthStateChanged(function(user) {
-	if(user){
-		console.log('Account linking success', user);
-		document.cookie = `OAuth=${user.G}`;
-	} else {
-		signInWitGoogle().then(response => {
-			console.log(response);
-		}, error => {
-			console.log(error);
-		});
+firebase.auth().getRedirectResult().then(result => {
+
+	if(result.credential){
+		// This gives you a Google Access Token. You can use it to access the Google API.
+		let token = result.credential.accessToken;
+		document.cookie = `OAuth=${token}`;
+		let user = { name: result.user.displayName, email: result.user.email, picture: result.user.photoURL, locations: [{ lat: 2, lng: 2, city: 'Never', country: 'Neverhood', street: 'Neverland' }] };
+		let userId = result.user.uid;
+
+		firebase.database().ref(`users/${userId}`).set(user);
+
+		console.log(result);
 	}
+	console.log('Account linking success', result);
+	// The signed-in user info.
+	let user = result.user;
+}).catch(error => {
+	console.log('Account linking success', error);
+	// Handle Errors here.
+	let errorCode = error.code;
+	let errorMessage = error.message;
+	// The email of the user's account used.
+	let email = error.email;
+	// The firebase.auth.AuthCredential type that was used.
+	let credential = error.credential;
+	// ...
 });
 
 export function Register() {
-	let email = process.env.EMAIL;
-	let password = process.env.PASSWORD;
-
-	if(!email || !password){
-		console.log('No password or email');
-	}
-
-	firebase.auth().createUserWithEmailAndPassword(email, password).catch(error => {
-		console.log('register error', error);
-		if(error.code === 'auth/email-already-in-use'){
-			let credential = firebase.auth.EmailAuthProvider.credential(email, password);
-
-			signInWitGoogle().then(() => {
-				firebase.auth().currentUser.link(credential).then(user => {
-					console.log('Account linking success', user);
-				}, error => {
-					console.log('Account linking error', error);
-				})
-			})
-		}
+	signInWitGoogle().then(() => {
+		firebase.auth().currentUser.link(credential);
+		createUser();
 	})
 }
 
 export function SignIn() {
-	firebase.auth().onAuthStateChanged(function(user) {
-		if (user) {
-			signInWitGoogle();
+	firebase.auth().onAuthStateChanged(user => {
+		if(user){
 			console.log('Account linking success', user);
+			document.cookie = `OAuth=${user.G}`;
 		} else {
-			firebase.auth().signInWithPopup(provider).then(function(result) {
-				// This gives you a Google Access Token.
-				var token = result.credential.accessToken;
-				// The signed-in user info.
-				var user = result.user;
-			});
-			console.log('No User around');
+			signInWitGoogle();
 		}
 	})
 }
@@ -101,6 +94,86 @@ export function SignOut() {
 		console.log('Signed out');
 	}, error => {
 		console.log('Some error ', error);
+	});
+}
+
+export function setLocationToMyLocations(location) {
+	firebase.auth().getRedirectResult().then(result => {
+
+		let locationsArray = [];
+		let userId = result.user.uid;
+		let leadsRef = firebase.database().ref(`users/${userId}/locations`);
+		leadsRef.on(`value`, (snapshot) => {
+			snapshot.forEach((childSnapshot) => {
+				locationsArray.push(childSnapshot.val());
+				locationsArray = [...locationsArray, location];
+			});
+		});
+		// The signed-in user info.
+	}).catch(error => {
+		console.log('Account linking error', error);
+		// Handle Errors here.
+		let errorCode = error.code;
+		let errorMessage = error.message;
+		// The email of the user's account used.
+		let email = error.email;
+		// The firebase.auth.AuthCredential type that was used.
+		let credential = error.credential;
+		// ...
+	});
+}
+
+export function removeLocationFromMyLocations(params) {
+	firebase.auth().getRedirectResult().then(result => {
+
+		let locationsArray = [];
+		let userId = result.user.uid;
+		let leadsRef = firebase.database().ref(`users/${userId}/locations`);
+		leadsRef.on(`value`, (snapshot) => {
+			snapshot.forEach((childSnapshot) => {
+				locationsArray.push(childSnapshot.val());
+				locationsArray = locationsArray.filter((place) => {
+					return params.lat !== place.lat && params.lng !== place.lng;
+				});
+				console.log(locationsArray);
+			});
+		});
+		// The signed-in user info.
+	}).catch(error => {
+		console.log('Account linking error', error);
+		// Handle Errors here.
+		let errorCode = error.code;
+		let errorMessage = error.message;
+		// The email of the user's account used.
+		let email = error.email;
+		// The firebase.auth.AuthCredential type that was used.
+		let credential = error.credential;
+		// ...
+	});
+}
+
+export function getMyLocations() {
+	firebase.auth().getRedirectResult().then(result => {
+
+		let locationsArray = [];
+		let userId = result.user.uid;
+		let leadsRef = firebase.database().ref(`users/${userId}/locations`);
+		leadsRef.on(`value`, (snapshot) => {
+			snapshot.forEach((childSnapshot) => {
+				locationsArray.push(childSnapshot.val());
+			});
+		});
+		// The signed-in user info.
+	}).catch(error => {
+		console.log('Account linking error', error);
+		// Handle Errors here.
+		let errorCode = error.code;
+		let errorMessage = error.message;
+		// The email of the user's account used.
+		let email = error.email;
+		// The firebase.auth.AuthCredential type that was used.
+		let credential = error.credential;
+		// ...
 	});
 }
 

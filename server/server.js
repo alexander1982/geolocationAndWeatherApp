@@ -1,4 +1,5 @@
 let firebase = require('firebase');
+let admin = require('firebase-admin');
 let path = require('path');
 let _ = require('lodash');
 let bodyParser = require('body-parser');
@@ -28,6 +29,11 @@ try {
 
 }
 
+admin.initializeApp({
+	                    credential : admin.credential.cert('firebase-sdk.json'),
+	                    databaseURL: 'https://findthelocation-46d13.firebaseio.com/'
+                    });
+
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -35,15 +41,16 @@ app.use(express.static(publicPath));
 app.use(bodyParser.json());
 //Add User
 app.post('/users', (req, res) => {
-	let body = _.pick(req.body, ['name', 'age', 'id']);
-	let user = { name: body.name, age: body.age };
-
-	firebase.database().ref('users/' + body.id).set(user);
+	let body = _.pick(req.body, ['username', 'email', 'profile_picture', 'id']);
+	let user = { name: body.username, email: body.email, picture: body.profile_picture };
+	let userId = body.id;
+console.log('asdasdasdasd ', user);
+	firebase.database().ref(`users/${id}`).set(user);
 });
 //Get User
-app.get('/users/user/:id', (req, res) => {
+app.get('/users/:id', (req, res) => {
 	let id = req.params.id;
-	
+	console.log(firebase.database().ref(`users/${id}`));
 });
 //Add Location
 app.post('/users/:id', (req, res) => {
