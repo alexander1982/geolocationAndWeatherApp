@@ -1,7 +1,6 @@
 let firebase = require('firebase');
 let firebaseTools = require('firebase-tools');
 
-console.log(process.env.FIREBASE_API_KEY);
 try {
 	let config = {
 		apiKey: process.env.FIREBASE_API_KEY,

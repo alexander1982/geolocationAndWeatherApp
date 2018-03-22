@@ -90,8 +90,16 @@ module.exports = {
 				FIREBASE_MESSAGING_SENDER_ID: JSON.stringify(process.env.FIREBASE_MESSAGING_SENDER_ID),
 				GOOGLE_MAP_API_KEY          : JSON.stringify(process.env.GOOGLE_MAP_API_KEY),
 				OPEN_WEATHER_MAP_API_KEY    : JSON.stringify(process.env.OPEN_WEATHER_MAP_API_KEY),
-				EMAIL                       : JSON.stringify(process.env.EMAIL),
-				PASSWORD                    : JSON.stringify(process.env.PASSWORD)
+				FIREBASE_SDK_TYPE: JSON.stringify(process.env.FIREBASE_SDK_TYPE),
+				FIREBASE_SDK_PROJECT_ID: JSON.stringify(process.env.FIREBASE_SDK_PROJECT_ID),
+				FIREBASE_SDK_PRIVATE_KEY_ID: JSON.stringify(process.env.FIREBASE_SDK_PRIVATE_KEY_ID),
+				FIREBASE_SDK_PRIVATE_KEY: JSON.stringify(process.env.FIREBASE_SDK_PRIVATE_KEY),
+				FIREBASE_SDK_CLIENT_EMAIL: JSON.stringify(process.env.FIREBASE_SDK_CLIENT_EMAIL),
+				FIREBASE_SDK_CLIENT_ID: JSON.stringify(process.env.FIREBASE_SDK_CLIENT_ID),
+				FIREBASE_SDK_AUTH_URI: JSON.stringify(process.env.FIREBASE_SDK_AUTH_URI),
+				FIREBASE_SDK_TOKEN_URI: JSON.stringify(process.env.FIREBASE_SDK_TOKEN_URI),
+				FIREBASE_SDK_AUTH_PROVIDER: JSON.stringify(process.env.FIREBASE_SDK_AUTH_PROVIDER),
+				FIREBASE_SDK_CLIENT_CERT_URL: JSON.stringify(process.env.FIREBASE_SDK_CLIENT_CERT_URL)
 			}
 
 		}),

@@ -41,28 +41,21 @@ firebase.auth().getRedirectResult().then(result => {
 		let userId = result.user.uid;
 
 		firebase.database().ref(`users/${userId}`).set(user);
-
-		console.log(result);
 	}
 	console.log('Account linking success', result);
-	// The signed-in user info.
+
 	let user = result.user;
 }).catch(error => {
 	console.log('Account linking success', error);
-	// Handle Errors here.
 	let errorCode = error.code;
 	let errorMessage = error.message;
-	// The email of the user's account used.
 	let email = error.email;
-	// The firebase.auth.AuthCredential type that was used.
 	let credential = error.credential;
-	// ...
 });
 
 export function Register() {
 	signInWitGoogle().then(() => {
 		firebase.auth().currentUser.link(credential);
-		createUser();
 	})
 }
 
@@ -78,28 +71,35 @@ export function SignIn() {
 }
 
 export function signInWitGoogle() {
-	let provider = new firebase.auth.GoogleAuthProvider();
-	provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
-	provider.addScope('profile');
-	provider.addScope('email');
-
 	return firebase.auth().signInWithRedirect(provider).catch(error => {
 		console.log('Google sign in error', error);
 	})
 }
 
 export function SignOut() {
-	firebase.auth().signOut().then(response => {
+	firebase.auth().signOut().then(() => {
 		document.cookie = "OAuth=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 		console.log('Signed out');
 	}, error => {
-		console.log('Some error ', error);
+		console.log('SignOut error ', error);
 	});
+}
+
+export function updateUserProfile(updatedUser) {
+	let user = firebase.auth().currentUser;
+	user.updateProfile({
+		                   name   : updatedUser.username,
+		                   email  : updatedUser.email,
+		                   picture: updatedUser.picture
+	                   }).then(() => {
+		
+	}).catch((error) => {
+		console.log('Update error ', error);
+	})
 }
 
 export function setLocationToMyLocations(location) {
 	firebase.auth().getRedirectResult().then(result => {
-
 		let locationsArray = [];
 		let userId = result.user.uid;
 		let leadsRef = firebase.database().ref(`users/${userId}/locations`);
@@ -109,17 +109,12 @@ export function setLocationToMyLocations(location) {
 				locationsArray = [...locationsArray, location];
 			});
 		});
-		// The signed-in user info.
 	}).catch(error => {
 		console.log('Account linking error', error);
-		// Handle Errors here.
 		let errorCode = error.code;
 		let errorMessage = error.message;
-		// The email of the user's account used.
 		let email = error.email;
-		// The firebase.auth.AuthCredential type that was used.
 		let credential = error.credential;
-		// ...
 	});
 }
 
@@ -138,23 +133,17 @@ export function removeLocationFromMyLocations(params) {
 				console.log(locationsArray);
 			});
 		});
-		// The signed-in user info.
 	}).catch(error => {
 		console.log('Account linking error', error);
-		// Handle Errors here.
 		let errorCode = error.code;
 		let errorMessage = error.message;
-		// The email of the user's account used.
 		let email = error.email;
-		// The firebase.auth.AuthCredential type that was used.
 		let credential = error.credential;
-		// ...
 	});
 }
 
 export function getMyLocations() {
 	firebase.auth().getRedirectResult().then(result => {
-
 		let locationsArray = [];
 		let userId = result.user.uid;
 		let leadsRef = firebase.database().ref(`users/${userId}/locations`);
@@ -162,21 +151,19 @@ export function getMyLocations() {
 			snapshot.forEach((childSnapshot) => {
 				locationsArray.push(childSnapshot.val());
 			});
+			console.log(locationsArray);
 		});
-		// The signed-in user info.
 	}).catch(error => {
 		console.log('Account linking error', error);
-		// Handle Errors here.
 		let errorCode = error.code;
 		console.log('Account linking error', error.code);
 		let errorMessage = error.message;
-		// The email of the user's account used.
 		let email = error.email;
-		// The firebase.auth.AuthCredential type that was used.
 		let credential = error.credential;
-		// ...
 	});
 }
+
+getMyLocations();
 
 export function fetchGeoLocation(values) {
 	const url = `${BASE_URL}?address=${values.street},+${values.city},+${values.country}&key=${API_KEY}`;

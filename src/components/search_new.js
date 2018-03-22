@@ -62,7 +62,9 @@ class SearchNew extends Component {
 				label="Street"
 				name="street"
 				component={this.renderField}/>
-				<button onClick={() => {this.props.signInWitGoogle()}} type="submit" className="btn-lg btn-block btn-primary submit-style box-shadow-bright"><span className="submit-inner-html button-text-shadow">Search</span>
+				<button onClick={() => {}} type="submit" className="btn-lg btn-block btn-primary submit-style box-shadow-bright"><span className="submit-inner-html button-text-shadow">Search</span>
+				</button>
+				<button onClick={() => {this.props.signInWitGoogle()}} type="" className="btn-lg btn-block btn-primary submit-style box-shadow-bright"><span className="submit-inner-html button-text-shadow">Sign In</span>
 				</button>
 			</form>
 		</div>

@@ -28,21 +28,31 @@ try {
 } catch(e) {
 
 }
+try {
+	let SDKConfig = {
+		type: process.env.FIREBASE_SDK_TYPE,
+		project_id: process.env.FIREBASE_SDK_PROJECT_ID,
+		private_key_id: process.env.FIREBASE_SDK_PRIVATE_KEY_ID,
+		private_key: process.env.FIREBASE_SDK_PRIVATE_KEY,
+		client_id: process.env.FIREBASE_SDK_CLIENT_EMAIL, 
+		auth_uri: process.env.FIREBASE_SDK_CLIENT_ID,
+		token_uri: process.env.FIREBASE_SDK_AUTH_URI,
+		auth_provider_x509_cert_url: process.env.FIREBASE_SDK_TOKEN_URI, 
+		client_x509_cert_url: process.env.FIREBASE_SDK_CLIENT_CERT_URL
+	};
+	admin.initializeApp({
+		                    credential : admin.credential.cert(SDKConfig),
+		                    databaseURL: 'https://findthelocation-46d13.firebaseio.com/'
+	                    });
+} catch(e) {
 
-admin.initializeApp({
-	                    credential : admin.credential.cert('firebase-sdk.json'),
-	                    databaseURL: 'https://findthelocation-46d13.firebaseio.com/'
-                    });
+}
+
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.static(publicPath));
-
-
-console.log(PublicPath);
-
-
 app.use(bodyParser.json());
 //Add User
 app.post('/users', (req, res) => {
