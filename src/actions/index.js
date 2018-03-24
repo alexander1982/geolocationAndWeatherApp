@@ -19,11 +19,14 @@ try {
 
 const BASE_URL = 'https://maps.googleapis.com/maps/api/geocode/json';
 const API_KEY = process.env.GOOGLE_MAP_API_KEY;
+
 export const CLEAN_STATE = 'clean_state';
 export const FETCH_GEOLOCATION = 'fetch_geoLocation';
 export const FETCH_WEATHER = 'fetch_weather';
 export const TOGGLE_MODAL = 'toggle_modal';
 export const TOGGLE_NAV_BAR = 'toggle_nav_bar';
+export const SET_USER = 'set_user';
+export const UNSET_USER = 'unset_user';
 
 firebase.auth().useDeviceLanguage();
 let provider = new firebase.auth.GoogleAuthProvider();
@@ -42,9 +45,12 @@ firebase.auth().getRedirectResult().then(result => {
 
 		firebase.database().ref(`users/${userId}`).set(user);
 	}
-	console.log('Account linking success', result);
+	console.log('Account linking success', result.user);
 
-	let user = result.user;
+	getUser(result.user.uid);
+	//setUserToState(result.user);
+	//let locations = getMyLocations();
+	//console.log(localUser);
 }).catch(error => {
 	console.log('Account linking success', error);
 	let errorCode = error.code;
@@ -52,6 +58,24 @@ firebase.auth().getRedirectResult().then(result => {
 	let email = error.email;
 	let credential = error.credential;
 });
+
+export function setUserToState(user) {
+	return {
+		type   : SET_USER,
+		payload: user
+	}
+}
+
+export function getUser(userId) {
+	let user = {};
+	let leadsRef = firebase.database().ref(`users/${userId}`);
+	leadsRef.on(`value`, (snapshot) => {
+		snapshot.forEach((childSnapshot) => {
+			user[childSnapshot.key] = childSnapshot.val();
+		});
+		store.dispatch(setUserToState(user));
+});
+}
 
 export function Register() {
 	signInWitGoogle().then(() => {
@@ -92,7 +116,7 @@ export function updateUserProfile(updatedUser) {
 		                   email  : updatedUser.email,
 		                   picture: updatedUser.picture
 	                   }).then(() => {
-		
+
 	}).catch((error) => {
 		console.log('Update error ', error);
 	})
@@ -151,7 +175,7 @@ export function getMyLocations() {
 			snapshot.forEach((childSnapshot) => {
 				locationsArray.push(childSnapshot.val());
 			});
-			console.log(locationsArray);
+			return locationsArray
 		});
 	}).catch(error => {
 		console.log('Account linking error', error);
@@ -162,8 +186,6 @@ export function getMyLocations() {
 		let credential = error.credential;
 	});
 }
-
-getMyLocations();
 
 export function fetchGeoLocation(values) {
 	const url = `${BASE_URL}?address=${values.street},+${values.city},+${values.country}&key=${API_KEY}`;
