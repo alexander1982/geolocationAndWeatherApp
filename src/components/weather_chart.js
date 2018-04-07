@@ -27,10 +27,6 @@ class WeatherChart extends Component {
 
 }
 
-	componentWillUpdate(nextProps, nextState) {
-		console.log(nextProps, nextState);
-	}
-
 componentWillUnmount() {
 	this.setState({
 		weatherData: null
@@ -113,8 +109,8 @@ console.log('For glory ',temps, daysOfTheWeek);
 	}
 }
 
-function mpStateToProps({ weather }) {
-	return { weather }
-}
+//function mpStateToProps({ weather }) {
+//	return { weather }
+//}
 
-export default connect(mpStateToProps, null)(WeatherChart);
+export default connect()(WeatherChart);

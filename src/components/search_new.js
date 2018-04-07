@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Field, reduxForm, reset, change } from 'redux-form';
 import { connect } from 'react-redux';
-import { fetchGeoLocation, cleanState, signInWitGoogle } from '../actions/index';
+import { fetchGeoLocation, cleanState, signIn, signOut, signInWithGoogle } from '../actions/index';
 
 import logo from '../../assets/images/earth_logo.png';
 
@@ -11,7 +11,6 @@ class SearchNew extends Component {
 	}
 
 	onFormSubmit(values) {
-		//this.props.cleanState();
 		this.props.fetchGeoLocation(values);
 		
 	}
@@ -62,10 +61,14 @@ class SearchNew extends Component {
 				label="Street"
 				name="street"
 				component={this.renderField}/>
-				<button onClick={() => {}} type="submit" className="btn-lg btn-block btn-primary submit-style box-shadow-bright"><span className="submit-inner-html button-text-shadow">Search</span>
+				<button type="submit" className="btn-lg btn-block btn-primary submit-style box-shadow-bright"><span className="submit-inner-html button-text-shadow">Search</span>
 				</button>
-				<button onClick={() => {this.props.signInWitGoogle()}} type="" className="btn-lg btn-block btn-primary submit-style box-shadow-bright"><span className="submit-inner-html button-text-shadow">Sign In</span>
-				</button>
+				<a onClick={() => {this.props.signInWithGoogle()}} className="btn-lg btn-block btn-primary submit-style box-shadow-bright"><span className="submit-inner-html button-text-shadow">Sign In</span>
+				</a>
+				<a onClick={() => {this.props.signOut()}} className="btn-lg btn-block btn-primary submit-style box-shadow-bright"><span className="submit-inner-html button-text-shadow">Sign Out</span>
+				</a>
+				<a onClick={() => {this.props.signInWithGoogle()}} className="btn-lg btn-block btn-primary submit-style box-shadow-bright"><span className="submit-inner-html button-text-shadow">Register</span>
+				</a>
 			</form>
 		</div>
 		)
@@ -85,21 +88,15 @@ function validate(values) {
 		errors.country = 'Add a country name'
 	}
 
-	if(!values.street && !values.city && !values.country) {
-
-	}
-
 	return errors;
 }
 
 const afterSubmit = (result, dispatch) => {
-	dispatch(change('NewSearchForm', 'street', ''));
-	dispatch(change('NewSearchForm', 'city', ''));
-	dispatch(change('NewSearchForm', 'country', ''));
+	dispatch(reset('NewSearchForm'));
 };
 
 export default reduxForm({
 	                         validate,
 	                         form           : 'NewSearchForm',
 	                         onSubmitSuccess: afterSubmit
-                         })(connect(null, { fetchGeoLocation, cleanState,signInWitGoogle })(SearchNew))
+                         })(connect(null, { fetchGeoLocation, cleanState, signIn, signOut, signInWithGoogle })(SearchNew))

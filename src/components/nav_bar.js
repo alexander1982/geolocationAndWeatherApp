@@ -13,8 +13,6 @@ class NavBar extends Component {
 	}
 
 	componentWillReceiveProps(newProps) {
-		console.log('hEY ', newProps.weather);
-		console.log('hEY2 ', this.props.weather);
 		if(newProps.location !== null && newProps.weather !== null && this.props.weather == null && !this.props.toggleNavBar || newProps.weather !== this.props.weather){
 			$('#navbarDropdownMenuLink').click();
 			$('#nav-toggler').click();

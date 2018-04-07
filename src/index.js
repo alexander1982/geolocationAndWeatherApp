@@ -3,13 +3,14 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter,Route, Switch } from 'react-router-dom';
 import { createStore, applyMiddleware } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
 import ReduxPromise from 'redux-promise';
 import logger from 'redux-logger';
 import reducers from './reducers';
 
 import GeoIndex from './components/geo_index';
 
-export const store = createStore(reducers, {}, applyMiddleware(ReduxPromise,logger));
+export const store = createStore(reducers, {}, composeWithDevTools(applyMiddleware(ReduxPromise,logger)));
 
 import '../style/style.css';
 import 'font-awesome-webpack2';

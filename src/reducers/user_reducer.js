@@ -1,13 +1,12 @@
-import {SET_USER, UNSET_USER} from '../actions/index';
+import {SET_USER, CLEAN_USER_STATE} from '../actions/index';
 
 export default function(state = {}, action) {
-	console.log('sadasdasdasd ');
 	switch(action.type){
 		case SET_USER:
-			console.log('sadasdasdasd ',action);
+		console.log('action',action.payload);
 			return action.payload;
-		case UNSET_USER:
-			return {};
+		case CLEAN_USER_STATE:
+			return null;
 		default:
 			return state;
 	}

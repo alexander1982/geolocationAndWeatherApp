@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { cleanState, fetchGeoLocation, toggleModalAction, toggleNavBarAction } from '../actions/index';
+import {store} from '../index';
+import { cleanState, fetchGeoLocation, toggleModalAction, toggleNavBarAction, authCheck } from '../actions/index';
 
 import tapOrClick from 'react-tap-or-click';
 
@@ -9,6 +10,7 @@ import WeatherInfo from '../containers/weatherInfo';
 import WeatherChart from './weather_chart';
 import SearchNew from './search_new';
 import NavBar from './nav_bar';
+import MyLocations from '../containers/my_locations';
 
 import $ from 'jquery';
 
@@ -16,7 +18,6 @@ class GeoIndex extends Component {
 
 	constructor(props) {
 		super(props);
-		this.toggleModalHere = this.toggleModalHere.bind(this);
 	}
 
 	toggleModalHere() {
@@ -24,39 +25,32 @@ class GeoIndex extends Component {
 	}
 
 	renderModal() {
-		$('body').append('<button id="modalButton" type="button" className="btn btn-primary btn-lg display-none" data-toggle="modal" data-target="#exampleModalCenter"/>');
+		$('body').
+		append('<button id="modalButton" type="button" className="btn btn-primary btn-lg display-none" data-toggle="modal" data-target="#exampleModalCenter"/>');
 		$('#modalButton').click();
 	}
 
 	renderMap() {
-		if(this.props.location == null){
-			return (
-			<div>
-				<img className="img-fluid gif-margin" src="http://cdn.ebaumsworld.com/mediaFiles/picture/416301/83779543.gif"/>
-			</div>
-			)
-		}
-
-		if(this.props.toggleModal === true) {
+		if(this.props.toggleModal === true){
 			this.renderModal();
 			this.props.cleanState();
 		}
 
-
-
-		if(this.props.location !== null && this.props.location.data.results.length) {
-			return (<GoogleMap />)
-		} else {
+		if(!(this.props.location instanceof Object) || this.props.location == null){
+			console.log('this.props.location', this.props.location);
 			return (
 			<div>
 				<img className="img-fluid gif-margin" src="http://cdn.ebaumsworld.com/mediaFiles/picture/416301/83779543.gif"/>
 			</div>
 			)
+		} else {
+			return (<GoogleMap />)
 		}
 
 	}
-	renderWeatherInfo(){
-		if(this.props.location !== null && this.props.location.data && this.props.location.data.results && this.props.location.data.results.length) {
+
+	renderWeatherInfo() {
+		if(this.props.location instanceof Object && this.props.location !== null && this.props.location.data && this.props.location.data.results && this.props.location.data.results.length){
 			return (
 			<WeatherInfo weather={this.props.weather}/>
 			)
@@ -65,8 +59,9 @@ class GeoIndex extends Component {
 		<div></div>
 		)
 	}
-	renderChart(){
-		if(this.props.location !== null && this.props.location.data.status !== 'ZERO_RESULTS') {
+
+	renderChart() {
+		if(this.props.location && this.props.location !== null && this.props.location.data && this.props.location.data.status !== 'ZERO_RESULTS'){
 			return (
 			<WeatherChart weather={this.props.weather}/>
 			)
@@ -76,8 +71,21 @@ class GeoIndex extends Component {
 		)
 	}
 
+	renderMyLocations() {
+		if(this.props.localUser !== null && this.props.userLocations !== null && this.props.userLocations.length){
+			console.log('this.props.userLocations ', this.props.userLocations);
+			return (
+			<MyLocations userLocations={this.props.userLocations}/>
+			)
+		} else {
+			return (
+			<div>No Locations yet</div>
+			)
+		}
+	}
+
 	render() {
-		
+
 		return (
 		<div className="container-fluid">
 
@@ -97,6 +105,7 @@ class GeoIndex extends Component {
 					<SearchNew/>
 				</div>
 				<div className="col-sm-8 col-lg-4 col-12 column-mutual-css map-width">
+					{this.renderMyLocations()}
 					{this.renderMap()}
 				</div>
 
@@ -127,7 +136,9 @@ class GeoIndex extends Component {
 							<h6>Please check the names of Street, City and Country.</h6>
 						</div>
 						<div className="modal-footer">
-							<button type="button" className="btn btn-primary" data-dismiss="modal" onClick={this.toggleModalHere}>Close</button>
+							<button type="button" className="btn btn-primary" data-dismiss="modal" onClick={this.toggleModalHere.bind(this)}>
+								Close
+							</button>
 						</div>
 					</div>
 				</div>
@@ -138,8 +149,8 @@ class GeoIndex extends Component {
 		)
 	}
 }
-function mapStateToProps({ location, weather, form, toggleModal, toggleNavBar }) {
-	return { location, weather, form, toggleModal, toggleNavBar };
+function mapStateToProps({ location, weather, form, toggleModal, toggleNavBar, userLocations, localUser }) {
+	return { location, weather, form, toggleModal, toggleNavBar, userLocations, localUser };
 }
 
-export default connect(mapStateToProps, { cleanState, fetchGeoLocation, toggleModalAction, toggleNavBarAction })(GeoIndex);
+export default connect(mapStateToProps, { cleanState, fetchGeoLocation, toggleModalAction, toggleNavBarAction, authCheck })(GeoIndex);

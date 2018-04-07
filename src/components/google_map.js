@@ -12,7 +12,7 @@ class GoogleMap extends Component {
 
 	componentWillReceiveProps(nextProps) {
 
-		if(nextProps.location !== null && nextProps.location.data && nextProps.location.data.results[0].geometry.location !== this.state.locationData) {
+		if(nextProps.location && nextProps.location !== null && nextProps.location.data && nextProps.location.data.results[0].geometry.location !== this.state.locationData) {
 			this.setState({
 				              locationData: nextProps.location.data.results[0].geometry.location
 			              });
@@ -37,7 +37,7 @@ class GoogleMap extends Component {
 	}
 
 	componentDidMount() {
-		if(this.props.location !== null && this.props.location.data.results.length) {
+		if(this.props.location && this.props.location !== null && this.props.location.data && this.props.location.data.results.length) {
 			this.setState({
 				              locationData: this.props.location.data.results[0].geometry.location
 			              });
