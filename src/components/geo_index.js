@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {store} from '../index';
-import { cleanState, fetchGeoLocation, toggleModalAction, toggleNavBarAction, authCheck } from '../actions/index';
+import { cleanState, fetchGeoLocation, toggleModalAction, toggleNavBarAction } from '../actions/index';
 
 import tapOrClick from 'react-tap-or-click';
 
@@ -73,7 +73,6 @@ class GeoIndex extends Component {
 
 	renderMyLocations() {
 		if(this.props.localUser !== null && this.props.userLocations !== null && this.props.userLocations.length){
-			console.log('this.props.userLocations ', this.props.userLocations);
 			return (
 			<MyLocations userLocations={this.props.userLocations}/>
 			)
@@ -153,4 +152,4 @@ function mapStateToProps({ location, weather, form, toggleModal, toggleNavBar, u
 	return { location, weather, form, toggleModal, toggleNavBar, userLocations, localUser };
 }
 
-export default connect(mapStateToProps, { cleanState, fetchGeoLocation, toggleModalAction, toggleNavBarAction, authCheck })(GeoIndex);
+export default connect(mapStateToProps, {  cleanState, fetchGeoLocation, toggleModalAction, toggleNavBarAction })(GeoIndex);

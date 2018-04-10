@@ -5,6 +5,7 @@ UNSET_SINGLE_LOCATION_FROM_STATE,
 CLEAN_MY_LOCATIONS
 } from '../actions/index';
 import _ from 'lodash';
+import {store} from '../index';
 
 export default function(state = null, action) {
 	switch(action.type){
@@ -14,11 +15,6 @@ export default function(state = null, action) {
 		case SET_SINGLE_LOCATION_TO_STATE:
 		console.log('SET_SINGLE_LOCATION_TO_STATE ', state);
 			return [...state, action.payload];
-		case UNSET_SINGLE_LOCATION_FROM_STATE:
-			console.log('State ', state);
-			return state.filter(location => {
-				return location.lat == action.payload.lat && location.lng == action.payload.lng
-			});
 		case CLEAN_MY_LOCATIONS:
 			return null;
 		default:
