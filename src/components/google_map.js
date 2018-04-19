@@ -1,80 +1,57 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchWeather } from '../actions/index';
+
 class GoogleMap extends Component {
 	constructor(props) {
 		super(props);
-
 		this.state = {
-			locationData: {}
-		};
-	}
-
-	componentWillReceiveProps(nextProps) {
-
-		if(nextProps.location && nextProps.location !== null && nextProps.location.data && nextProps.location.data.results[0].geometry.location !== this.state.locationData) {
-			this.setState({
-				              locationData: nextProps.location.data.results[0].geometry.location
-			              });
-
-			let lat = parseFloat(nextProps.location.data.results[0].geometry.location.lat);
-			let lng = parseFloat(nextProps.location.data.results[0].geometry.location.lng);
-
-			this.map.panTo({ lat: lat, lng: lng });
-			this.props.fetchWeather({ lat: lat, lng: lng });
-
-			this.panorama = new google.maps.StreetViewPanorama(
-			document.getElementById('map'), {
-				position: { lat: lat, lng: lng },
-				pov     : {
-					heading: -60,
-					pitch  : 10
-				}
-			});
-			this.map.setStreetView(this.panorama);
+			location: null
 		}
-
 	}
 
 	componentDidMount() {
-		if(this.props.location && this.props.location !== null && this.props.location.data && this.props.location.data.results.length) {
+		console.log('from componentDidMount');
+		if(this.props.location){
+			this.renderThisMap(this.props.location);
 			this.setState({
-				              locationData: this.props.location.data.results[0].geometry.location
-			              });
-
-			let lat = parseFloat(this.props.location.data.results[0].geometry.location.lat);
-			let lng = parseFloat(this.props.location.data.results[0].geometry.location.lng);
-
-			this.props.fetchWeather({lat, lng});
-			this.map = new google.maps.Map(this.refs.map, {
-				zoom  : 16,
-				center: { lat: lat, lng: lng }
-			});
-
-			this.marker = new google.maps.Marker({
-				position: { lat: lat, lng: lng },
-				map     : this.map,
-				title   : 'You'
-			});
-			this.panorama = new google.maps.StreetViewPanorama(
-			document.getElementById('map'), {
-				position: { lat: lat, lng: lng },
-				pov     : {
-					heading: 34,
-					pitch  : 10
-				}
-			});
-			this.map.setStreetView(this.panorama);
+				              location: this.props.location
+			              })
 		}
 	}
 
+	componentWillReceiveProps(nextProps) {
+		if(nextProps.location){
+			this.renderThisMap(nextProps.location);
+			this.setState({
+				location: nextProps.location
+			              })
+		}
+	}
+
+	renderThisMap(geometry){
+		let lat = parseFloat(geometry.lat);
+		let lng = parseFloat(geometry.lng);
+
+		let map = new google.maps.Map(document.getElementById('map'), {
+			center: { lat: lat, lng: lng },
+			zoom: 14
+		});
+		
+		let panorama = new google.maps.StreetViewPanorama(
+		document.getElementById('map'), {
+			position: { lat: lat, lng: lng },
+			pov     : {
+				heading: -60,
+				pitch  : 10
+			}
+		});
+		map.setStreetView(panorama);
+	}
+
 	render() {
+		console.log('Map Rendered');
 		return <div id="map" className="map" ref="map"></div>
 	}
 }
 
-function mapStateToProps({location}) {
-	return {location};
-}
-
-export default connect(mapStateToProps, { fetchWeather })(GoogleMap);
+export default connect()(GoogleMap);

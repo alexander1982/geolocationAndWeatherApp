@@ -1,11 +1,8 @@
 import {
 SET_LOCATIONS_TO_STATE,
 SET_SINGLE_LOCATION_TO_STATE,
-UNSET_SINGLE_LOCATION_FROM_STATE,
 CLEAN_MY_LOCATIONS
 } from '../actions/index';
-import _ from 'lodash';
-import {store} from '../index';
 
 export default function(state = null, action) {
 	switch(action.type){

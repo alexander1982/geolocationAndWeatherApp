@@ -23,6 +23,7 @@ const API_KEY = process.env.GOOGLE_MAP_API_KEY;
 
 export const CLEAN_STATE = 'clean_state';
 export const CLEAN_USER_STATE = 'clean_user_state';
+export const CLEAN_WEATHER_STATE = 'clean_weather_state';
 export const FETCH_GEOLOCATION = 'fetch_geoLocation';
 export const FETCH_WEATHER = 'fetch_weather';
 export const TOGGLE_MODAL = 'toggle_modal';
@@ -43,21 +44,18 @@ provider.addScope('email');
 firebase.auth().onAuthStateChanged(user => {
 	if(user){
 		getUser(user.uid);
-		//getMyLocations(User.uid);
 	}
 });
 
-	firebase.auth().getRedirectResult().then(result => {
-
-		if(result.credential){
-			let user = { name: result.user.displayName, email: result.user.email, picture: result.user.photoURL };
-			let userId = result.user.uid;
-			firebase.database().ref(`users/${userId}`).set(user);
-		}
-	}).catch(error => {
-		console.log('Account linking error', error);
-	});
-
+firebase.auth().getRedirectResult().then(result => {
+	if(result.credential){
+		let user = { name: result.user.displayName, email: result.user.email, picture: result.user.photoURL };
+		let userId = result.user.uid;
+		firebase.database().ref(`users/${userId}`).set(user);
+	}
+}).catch(error => {
+	console.log('Account linking error', error);
+});
 
 function setUserToState(userProfile) {
 	return {
@@ -73,37 +71,64 @@ export function unsetUserFromState() {
 }
 
 export function getUser(userId) {
-	let stateUser = {};
+	console.log('Gettin');
 	let userProfile = {};
 	let databaseLocations = null;
 	let myLocations = [];
-	let leadsRef = firebase.database().ref(`users/${userId}`);
-	leadsRef.on(`value`, (snapshot) => {
-		snapshot.forEach((childSnapshot) => {
-			stateUser[childSnapshot.key] = childSnapshot.val();
-		});
-
-		if(stateUser.name !== undefined){
-			userProfile = {
-				email  : stateUser.email,
-				name   : stateUser.name,
-				picture: stateUser.picture
-			};
-		}
+	//let leadsRef = firebase.database().ref(`users/${userId}`);
+	return firebase.database().ref(`/users/${userId}`).once('value').then(snapshot => {
+		console.log('snapshot.val().locations ', snapshot.val());
+		userProfile = {
+			email  : snapshot.val().email,
+			name   : snapshot.val().name,
+			picture: snapshot.val().picture
+		};
 		store.dispatch(setUserToState(userProfile));
 
-		if(stateUser.locations){
-			databaseLocations = stateUser.locations;
+		if(snapshot.val().locations !== undefined){
+			databaseLocations = snapshot.val().locations;
 			for(let key in databaseLocations){
 				let theLocation = {};
 				theLocation = { [key]: databaseLocations[key] };
+				console.log('theLocation ', theLocation);
 				myLocations.push(theLocation);
 			}
 			console.log('myLocations ', myLocations);
-			if(myLocations !== undefined){
-				store.dispatch(setLocationsToState(myLocations));
-			}
+			store.dispatch(setLocationsToState(myLocations));
 		}
+	});
+	//leadsRef.on(`value`, (snapshot) => {
+	//	snapshot.forEach((childSnapshot) => {
+	//		stateUser[childSnapshot.key] = childSnapshot.val();
+	//	});
+	//	if(stateUser.name !== undefined){
+	//		userProfile = {
+	//			email  : stateUser.email,
+	//			name   : stateUser.name,
+	//			picture: stateUser.picture
+	//		};
+	//	}
+	//	store.dispatch(setUserToState(userProfile));
+	//	if(stateUser.locations !== undefined){
+	//		console.log('stateUser.locations !== undefined ', stateUser.locations);
+	//		databaseLocations = stateUser.locations;
+	//		for(let key in databaseLocations){
+	//			let theLocation = {};
+	//			theLocation = { [key]: databaseLocations[key] };
+	//			console.log('theLocation ', theLocation);
+	//			myLocations.push(theLocation);
+	//		}
+	//		console.log('myLocations ', myLocations);
+	//		var uniqueArray = a => [...new Set(a.map(o => JSON.stringify(o)))].map(s => JSON.parse(s));
+	//		let someArrr = uniqueArray(myLocations);
+	//		console.log('uniqEs6 ', someArrr);
+	//		store.dispatch(setLocationsToState(someArrr));
+	//	}
+	//});
+}
+export function signInWithGoogle() {
+	return firebase.auth().signInWithRedirect(provider).catch(error => {
+		console.log('Google sign in error', error);
 	})
 }
 
@@ -118,12 +143,6 @@ export function signIn() {
 	if(User){
 		getUser(User.uid);
 	}
-}
-
-export function signInWithGoogle() {
-	return firebase.auth().signInWithRedirect(provider).catch(error => {
-		console.log('Google sign in error', error);
-	})
 }
 
 export function signOut() {
@@ -149,193 +168,121 @@ export function updateUserProfile(updatedUser) {
 }
 
 export function setLocationToMyLocations(newLocation) {
-console.log('yes');
-	let locationsArray = [];
-	let locationsArray_2 = [];
-	let locationsArray_3 = [];
-	let locationsArray_4 = [];
-	let userProfileArray = [];
-	let newId = null;
-	let foundLocation = null;
-	let thirdObj = {};
-	let locationObj = {};
-	let userId = null;
-	let finalObj = {};
-	let currentUser = firebase.auth().currentUser;
-	if(currentUser){
-		userId = currentUser.uid;
-		console.log('currentUser', currentUser);
-	}
-	let leadsRef = firebase.database().ref(`users/${userId}`);
-	leadsRef.on(`value`, (snapshot) => {
-		if(!snapshot.val().locations){
-			console.log('No');
-			let makeId = (b) => {
-				let s = Math.floor((b.lat + b.lng) * 100000000);
-				s.toString();
-				console.log('s', s);
-				return s;
-			};
-			newId = makeId(newLocation);
-			console.log('newId ', newId);
-			firebase.database().ref(`/users/${userId}/locations/${newId}`).set(newLocation);
-		} else {
-			console.log('snapshot', snapshot.val());
-			snapshot.forEach((childSnapshot) => {
-				userProfileArray.push(childSnapshot.val());
-			});
-			let makeId = (b) => {
-				let s = Math.floor((b.lat + b.lng) * 100000000);
-				s.toString();
-				console.log('s', s);
-				return s;
-			};
-			newId = makeId(newLocation);
-			console.log('newId ', newId);
-			userProfileArray.forEach(location => {
-				if(location instanceof Object){
-					firebase.database().ref(`users/${userId}/locations`).on(`value`, (snapshot) => {
-						snapshot.forEach((childSnapshot) => {
-							locationsArray.push(snapshot.val());
-							console.log('snapshot.val() ', snapshot.val());
-						});
-						if(locationsArray.length){
-							_.map(locationsArray, (value, akey) => {
-								for(let bkey in value){
-									locationsArray_2.push(value[bkey]);
-								}
-								_.uniqBy(locationsArray_2, 'address');
+	let savedLocations = [];
+	let savedLocations_2 = [];
+	let formatted_location = {};
+	let duplicateCheck = true;
+	let makeId = (b) => {
+		let s = Math.floor((b.lat + b.lng) * 100000000);
+		s.toString();
+		console.log('s', s);
+		return s;
+	};
+
+	formatted_location.city = newLocation.city;
+	formatted_location.country = newLocation.country;
+	formatted_location.street = newLocation.street;
+	formatted_location.formatted_address = newLocation.formatted_address;
+	formatted_location.lat = newLocation.lat;
+	formatted_location.lng = newLocation.lng;
+
+	let userId = firebase.auth().currentUser.uid;
+	if(userId){
+		return firebase.database().ref(`/users/${userId}`).once('value').then(snapshot => {
+			if(snapshot.val().locations == undefined){
+				let newId = makeId(newLocation);
+				firebase.database().ref(`/users/${userId}/locations/${newId}`).set(formatted_location).then(() => {
+					return firebase.database().ref(`/users/${userId}`).once('value').then(snapshot => {
+						if(snapshot.val().locations){
+							_.map(snapshot.val().locations, (value, key) => {
+								let obj = {};
+								obj[key] = value;
+								savedLocations.push(obj);
 							});
-							locationsArray_2.forEach((place) => {
-								if(place.lat == newLocation.lat && place.lng == newLocation.lng){
-									foundLocation = place;
-								} else {
-									foundLocation = null;
-								}
-							});
-							if(foundLocation == null){
-								locationsArray.map((someValue) => {
-									locationObj = someValue;
-								});
-								console.log('locationObj',  locationObj);
-								for(let bkey in locationObj){
-									finalObj[bkey] = locationObj[bkey];
-									locationsArray_3.push(finalObj);
-								}
-								locationsArray_3 = _.uniqBy(locationsArray_3, 'address');
-								console.log('LocationsArray',  locationsArray_3);
-								store.dispatch(setLocationsToState(locationsArray_3));
-								firebase.database().ref(`/users/${userId}/locations/${newId}`).set(newLocation);
-							}
-						} else {
-							thirdObj[newId] = newLocation;
-							locationsArray_4.push(thirdObj);
-							store.dispatch(setLocationsToState(locationsArray_4));
-							firebase.database().ref(`/users/${userId}/locations/${newId}`).set(newLocation);
+							store.dispatch(setLocationsToState(savedLocations));
 						}
-					});
+					})
+				});
+			} else {
+				savedLocations = snapshot.val().locations;
+				_.map(savedLocations, (value, key) => {
+					if(savedLocations[key] !== formatted_location){
+						duplicateCheck = false;
+					}
+				});
 
-				}
-			});
-		}
-	});
-}
-
-export function removeLocationFromMyLocations(params) {
-	let userId = null;
-	let finalObj = {};
-	let locationToDelete = null;
-	let currentUser = firebase.auth().currentUser;
-	if(currentUser){
-		userId = currentUser.uid;
-	}
-	console.log('userId_1', userId);
-	let userProfile = [];
-	let databaseLocations = [];
-	let startLeadsRef = firebase.database().ref(`users/${userId}`);
-
-		startLeadsRef.on(`value`, (snapshot) => {
-			console.log('snapshot.val()', snapshot.val());
-			snapshot.forEach((childSnapshot) => {
-				userProfile.push(childSnapshot.val());
-			});
-			console.log('snapshot.val()', userProfile);
-			console.log('snapshot.val()', params);
-			console.log('userId', userId);
-			userProfile.forEach((locationObj) => {
-				if(locationObj instanceof Object){
-					databaseLocations.push(locationObj);
-				}
-			});
-			console.log('databaseLocations', databaseLocations);
-			databaseLocations.forEach(dataLocation => {
-				finalObj = dataLocation;
-			});
-			console.log('finalObj ', finalObj);
-			for(let key in finalObj){
-				if(params.lat == finalObj[key].lat){
-					locationToDelete = key;
-					console.log('locationToDelete ', locationToDelete);
-					firebase.database().ref(`users/${userId}/locations`).child(locationToDelete).set(null).then(() => {
-						getMyLocations(userId);
-					});
+				if(!duplicateCheck){
+					let newId = makeId(newLocation);
+					firebase.database().ref(`/users/${userId}/locations/${newId}`).set(formatted_location);
+					return firebase.database().ref(`/users/${userId}`).once('value').then(snapshot => {
+						if(snapshot.val().locations){
+							_.map(snapshot.val().locations, (value, key) => {
+								let obj = {};
+								obj[key] = value;
+								savedLocations_2.push(obj);
+							});
+							store.dispatch(setLocationsToState(savedLocations_2));
+						}
+					})
 				}
 			}
 		});
+	}
 }
 
-export function getMyLocations(id) {
-	let myLocations = [];
-	let leadsRef = firebase.database().ref(`users/${id}/locations`);
-	leadsRef.on(`value`, (snapshot) => {
-		snapshot.forEach((childSnapshot) => {
-			let the_key = childSnapshot.key;
-			let theLocation = {};
-			theLocation[the_key] = childSnapshot.val();
-			myLocations.push(theLocation)
+export function removeLocationFromMyLocations(location) {
+	let savedLocations = [];
+	let locationId = null;
+	let userId = firebase.auth().currentUser.uid;
+
+	if(userId){
+		return firebase.database().ref(`/users/${userId}`).once('value').then(function(snapshot) {
+			_.map(snapshot.val().locations, (value, key) => {
+				if(snapshot.val().locations[key] !== location){
+					locationId = key;
+				}
+			});
+			if(locationId){
+				firebase.database().ref(`/users/${userId}/locations`).child(locationId).remove();
+				return firebase.database().ref(`/users/${userId}`).once('value').then(snapshot => {
+					if(snapshot.val().locations == undefined) {
+						console.log('snapshot.val().locations ', snapshot.val());
+						return store.dispatch(setLocationsToState(null));
+					} else {
+						console.log('snapshot.val().locations ', snapshot.val().locations);
+						_.map(snapshot.val().locations, (value, key) => {
+							let obj = {};
+							obj[key] = value;
+							savedLocations.push(obj);
+						});
+						return store.dispatch(setLocationsToState(savedLocations));
+					}
+				})
+			}
 		});
-		store.dispatch(setLocationsToState(myLocations));
-		console.log('myLocations ', myLocations);
-	});
-}
-
-export function setLocation(location) {
-	let locationData = {
-		address: location.injected_data.formatted_address,
-		city   : location.injected_data.city,
-		country: location.injected_data.country,
-		street : location.injected_data.street,
-		lat    : location.injected_data.geometry.lat,
-		lng    : location.injected_data.geometry.lng
-	};
-	console.log('locationData', locationData);
-	setLocationToMyLocations(locationData);
+	}
 }
 
 export function fetchGeoLocation(values) {
+	console.log('Values', values);
 	const url = `${BASE_URL}?address=${values.street},+${values.city},+${values.country}&key=${API_KEY}`;
 	const request = axios.get(url).then(
 	response => {
 		console.log('gahah', response);
 		if(!response.data.status || response.data.status === "ZERO_RESULTS"){
 			store.dispatch(toggleModalAction());
-		} else if(response.data.status == "OK"){
-			let formattedAddress = {
-				injected_data: {
-					street           : values.street,
-					city             : values.city,
-					country          : values.country,
-					geometry         : {
-						lat: response.data.results[0].geometry.location.lat,
-						lng: response.data.results[0].geometry.location.lng
-					},
-					formatted_address: response.data.results[0].formatted_address
-				}
-			};
-			console.log('formattedAddress', formattedAddress);
-			setLocation(formattedAddress);
 		}
-		return response
+		console.log('theResponse ---------> ', response);
+		let newResponse = response;
+		newResponse.street = values.street;
+		newResponse.country = values.country;
+		newResponse.city = values.city;
+		newResponse.lat = response.data.results[0].geometry.location.lat;
+		newResponse.lng = response.data.results[0].geometry.location.lng;
+		newResponse.formatted_address = response.data.results[0].formatted_address;
+		//fetchWeather(response.data.results[0].geometry.location);
+		setLocationToMyLocations(newResponse);
+		return newResponse
 	},
 	error => {
 		console.log('Fetch geolocation went wrong ', error);
@@ -351,14 +298,19 @@ export function fetchGeoLocation(values) {
 const OPEN_WEATHER_KEY = process.env.OPEN_WEATHER_MAP_API_KEY;
 const OPEN_WEATHER_BASE_URL = `http://api.openweathermap.org/data/2.5/forecast`;
 export function fetchWeather(values) {
+	console.log('response_1', values);
 	const url = `${OPEN_WEATHER_BASE_URL}?lat=${values.lat}&lon=${values.lng}&appid=${OPEN_WEATHER_KEY}`;
 	const request = axios.get(url).then(
-	response => response,
+	response => {
+		if(response){
+			console.log('response_1', response);
+			return response;
+		}
+	},
 	error => {
 		console.log('Fetch weather went wrong ', error)
 	}
 	);
-
 	return {
 		type   : FETCH_WEATHER,
 		payload: request

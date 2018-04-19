@@ -39,7 +39,7 @@ module.exports = {
 	module   : {
 		rules: [
 			{
-				test   : /\.js$/,
+				test   : /\.jsx|js$/,
 				use    : 'babel-loader',
 				exclude: /node_modules/
 			},
@@ -71,6 +71,7 @@ module.exports = {
 		new webpack.ProvidePlugin({
 			$     : 'jquery',
 			jQuery: 'jquery'
+			
 		}),
 
 		new webpack.optimize.CommonsChunkPlugin({
