@@ -1,7 +1,6 @@
 import axios from 'axios';
 import firebase from 'firebase';
 import { store } from '../index';
-import CryptoJS from 'crypto-js';
 import _ from 'lodash';
 
 try {
@@ -29,7 +28,6 @@ export const FETCH_WEATHER = 'fetch_weather';
 export const TOGGLE_MODAL = 'toggle_modal';
 export const TOGGLE_NAV_BAR = 'toggle_nav_bar';
 export const SET_USER = 'set_user';
-export const UNSET_USER = 'unset_user';
 export const SET_LOCATIONS_TO_STATE = 'set_locations_to_state';
 export const SET_SINGLE_LOCATION_TO_STATE = 'set_single_location_to_state';
 export const UNSET_SINGLE_LOCATION_FROM_STATE = 'unset_single_location_from_state';
@@ -71,13 +69,10 @@ export function unsetUserFromState() {
 }
 
 export function getUser(userId) {
-	console.log('Gettin');
 	let userProfile = {};
 	let databaseLocations = null;
 	let myLocations = [];
-	//let leadsRef = firebase.database().ref(`users/${userId}`);
 	return firebase.database().ref(`/users/${userId}`).once('value').then(snapshot => {
-		console.log('snapshot.val().locations ', snapshot.val());
 		userProfile = {
 			email  : snapshot.val().email,
 			name   : snapshot.val().name,
@@ -90,41 +85,11 @@ export function getUser(userId) {
 			for(let key in databaseLocations){
 				let theLocation = {};
 				theLocation = { [key]: databaseLocations[key] };
-				console.log('theLocation ', theLocation);
 				myLocations.push(theLocation);
 			}
-			console.log('myLocations ', myLocations);
 			store.dispatch(setLocationsToState(myLocations));
 		}
 	});
-	//leadsRef.on(`value`, (snapshot) => {
-	//	snapshot.forEach((childSnapshot) => {
-	//		stateUser[childSnapshot.key] = childSnapshot.val();
-	//	});
-	//	if(stateUser.name !== undefined){
-	//		userProfile = {
-	//			email  : stateUser.email,
-	//			name   : stateUser.name,
-	//			picture: stateUser.picture
-	//		};
-	//	}
-	//	store.dispatch(setUserToState(userProfile));
-	//	if(stateUser.locations !== undefined){
-	//		console.log('stateUser.locations !== undefined ', stateUser.locations);
-	//		databaseLocations = stateUser.locations;
-	//		for(let key in databaseLocations){
-	//			let theLocation = {};
-	//			theLocation = { [key]: databaseLocations[key] };
-	//			console.log('theLocation ', theLocation);
-	//			myLocations.push(theLocation);
-	//		}
-	//		console.log('myLocations ', myLocations);
-	//		var uniqueArray = a => [...new Set(a.map(o => JSON.stringify(o)))].map(s => JSON.parse(s));
-	//		let someArrr = uniqueArray(myLocations);
-	//		console.log('uniqEs6 ', someArrr);
-	//		store.dispatch(setLocationsToState(someArrr));
-	//	}
-	//});
 }
 export function signInWithGoogle() {
 	return firebase.auth().signInWithRedirect(provider).catch(error => {
@@ -133,14 +98,21 @@ export function signInWithGoogle() {
 }
 
 export function Register() {
-	signInWitGoogle().then(() => {
-		firebase.auth().currentUser.link(credential);
-	})
+	let User = firebase.auth().currentUser;
+	if(!User) {
+		signInWitGoogle().then(() => {
+			firebase.auth().currentUser.link(credential);
+		})
+	}
 }
 
 export function signIn() {
 	let User = firebase.auth().currentUser;
-	if(User){
+	if(!User){
+		signInWitGoogle().then(() => {
+			firebase.auth().currentUser.link(credential);
+		})
+	} else {
 		getUser(User.uid);
 	}
 }
@@ -246,10 +218,8 @@ export function removeLocationFromMyLocations(location) {
 				firebase.database().ref(`/users/${userId}/locations`).child(locationId).remove();
 				return firebase.database().ref(`/users/${userId}`).once('value').then(snapshot => {
 					if(snapshot.val().locations == undefined) {
-						console.log('snapshot.val().locations ', snapshot.val());
 						return store.dispatch(setLocationsToState(null));
 					} else {
-						console.log('snapshot.val().locations ', snapshot.val().locations);
 						_.map(snapshot.val().locations, (value, key) => {
 							let obj = {};
 							obj[key] = value;
@@ -264,15 +234,12 @@ export function removeLocationFromMyLocations(location) {
 }
 
 export function fetchGeoLocation(values) {
-	console.log('Values', values);
 	const url = `${BASE_URL}?address=${values.street},+${values.city},+${values.country}&key=${API_KEY}`;
 	const request = axios.get(url).then(
 	response => {
-		console.log('gahah', response);
 		if(!response.data.status || response.data.status === "ZERO_RESULTS"){
 			store.dispatch(toggleModalAction());
 		}
-		console.log('theResponse ---------> ', response);
 		let newResponse = response;
 		newResponse.street = values.street;
 		newResponse.country = values.country;
@@ -281,14 +248,16 @@ export function fetchGeoLocation(values) {
 		newResponse.lng = response.data.results[0].geometry.location.lng;
 		newResponse.formatted_address = response.data.results[0].formatted_address;
 		store.dispatch(fetchWeather(response.data.results[0].geometry.location));
-		setLocationToMyLocations(newResponse);
+		let user = firebase.auth().currentUser;
+		if(user) {
+			setLocationToMyLocations(newResponse);
+		}
 		return newResponse
 	},
 	error => {
 		console.log('Fetch geolocation went wrong ', error);
 	}
 	);
-	console.log('request', request);
 	return {
 		type   : FETCH_GEOLOCATION,
 		payload: request
@@ -298,12 +267,10 @@ export function fetchGeoLocation(values) {
 const OPEN_WEATHER_KEY = process.env.OPEN_WEATHER_MAP_API_KEY;
 const OPEN_WEATHER_BASE_URL = `http://api.openweathermap.org/data/2.5/forecast`;
 export function fetchWeather(values) {
-	console.log('response_1', values);
 	const url = `${OPEN_WEATHER_BASE_URL}?lat=${values.lat}&lon=${values.lng}&appid=${OPEN_WEATHER_KEY}`;
 	const request = axios.get(url).then(
 	response => {
 		if(response){
-			console.log('response_1', response);
 			return response;
 		}
 	},
@@ -337,7 +304,6 @@ export function unsetSingleLocationFromState(location) {
 }
 
 export function setLocationsToState(locations) {
-	console.log('Locations1', locations);
 	return {
 		type   : SET_LOCATIONS_TO_STATE,
 		payload: locations
