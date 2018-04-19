@@ -82,23 +82,22 @@ class GeoIndex extends Component {
 		} else {
 			console.log('this.props.location.GoogleMap', this.props.location);
 			return (
-			<div>Yes</div>
+			<GoogleMap location={this.props.location} />
 			)
 		}
 	}
 
 	renderWeatherInfo() {
-		if(this.state.location instanceof Object && this.state.location !== null && this.state.location.data && this.state.location.data.status === 'OK' && this.state.location.data.results[0].geometry.location){
-
-			//	return (
-			//<WeatherInfo weather={this.props.weather}/>
-			//)
+		if(this.props.weather){
+				return (
+			<WeatherInfo weather={this.props.weather}/>
+			)
 		}
 		return null;
 	}
 
 	renderChart() {
-		if(this.state.location && this.state.location !== null && this.state.location.data && this.state.location.data.status === 'OK'){
+		if(this.props.weather){
 			return (
 			<WeatherChart weather={this.props.weather}/>
 			)
@@ -145,11 +144,11 @@ class GeoIndex extends Component {
 
 						</div>
 						<div className="col-sm-6 col-lg-3 col-12 column-mutual-css weather-info chart-and-graph-background-left">
-
+							{this.renderWeatherInfo()}
 						</div>
 
 						<div className="col-sm-6 col-lg-3 col-12 column-mutual-css weather-info chart-and-graph-background-right">
-
+							{this.renderChart()}
 						</div>
 					</div>
 				</div>

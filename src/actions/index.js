@@ -280,7 +280,7 @@ export function fetchGeoLocation(values) {
 		newResponse.lat = response.data.results[0].geometry.location.lat;
 		newResponse.lng = response.data.results[0].geometry.location.lng;
 		newResponse.formatted_address = response.data.results[0].formatted_address;
-		//fetchWeather(response.data.results[0].geometry.location);
+		store.dispatch(fetchWeather(response.data.results[0].geometry.location));
 		setLocationToMyLocations(newResponse);
 		return newResponse
 	},
