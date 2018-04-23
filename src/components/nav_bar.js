@@ -103,7 +103,7 @@ class NavBar extends Component {
 									label="Street"
 									name="street"
 									component={this.renderField}/>
-									<button type="submit" className="btn-lg btn-block btn-primary submit-style box-shadow-bright"><span
+									<button type="submit" className="btn-lg btn-block btn-primary box-shadow-bright"><span
 									className="submit-inner-html button-text-shadow">Search</span>
 									</button>
 								</form>

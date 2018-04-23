@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
-import { removeLocationFromMyLocations, fetchGeoLocation, cleanState } from '../actions/index';
+import { removeLocationFromMyLocations, fetchGeoLocation } from '../actions/index';
 import { store } from '../index';
 import _ from 'lodash';
 import uniqId from 'uniqid';
@@ -21,15 +20,10 @@ export class MyLocations extends Component {
 		let someArr = [];
 		let count = 0;
 		let val = {};
-		_.map(locations, (value, akey) => {
-			console.log('locationsArray___4', value);
-			console.log('locationsArray___4', akey);
-			for(let bkey in value){
-				val = value[bkey];
-				console.log('Val', val);
-				console.log('count', count);
+		_.map(locations, (value, a_key) => {
+			for(let b_key in value){
+				val = value[b_key];
 				someArr[count] = val;
-				console.log('someArr', someArr);
 			}
 			count++;
 		});
@@ -37,24 +31,21 @@ export class MyLocations extends Component {
 	}
 
 	onRemove(locationToRemove) {
-	store.dispatch(this.props.removeLocationFromMyLocations(locationToRemove));
+		store.dispatch(this.props.removeLocationFromMyLocations(locationToRemove));
 	}
 
 	render() {
 		if(this.props.userLocations && this.props.userLocations.length > 0){
 			let formatted_locations = this.formatUserLocations(this.props.userLocations);
-			console.log('this.state.userLocations ', this.props.userLocations);
 			return (
-			<div className="dropdown">
-				<button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+			<div className="dropdown" id="myLocationsContainer">
+				<button className="btn-lg btn-block btn-primary_3 box-shadow-bright dropdown-toggle" type="button" id="dropdownMenuButton"
 				        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					Dropdown button
+					<span className="submit-inner-html button-text-shadow">My Locations</span>
 				</button>
 				<div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
 					{formatted_locations.map((value) => {
-						console.log('Location', value);
 						let specialKey_1 = this.generateKey();
-						console.log('specialKey_1', specialKey_1);
 						return (
 						<div key={specialKey_1}>
 					<span onClick={() => {
@@ -63,7 +54,7 @@ export class MyLocations extends Component {
 					}>{value.formatted_address}</span>
 					<span onClick={() => {
 						this.onRemove({lat: value.lat, lng: value.lng, formatted_address: value.formatted_address});
-					}}>{value.lat}</span>
+					}}>X</span>
 						</div>
 						)
 					})}
@@ -78,4 +69,4 @@ export class MyLocations extends Component {
 	}
 }
 
-export default connect(null, { removeLocationFromMyLocations, fetchGeoLocation, cleanState })(MyLocations);
+export default connect(null, { removeLocationFromMyLocations, fetchGeoLocation })(MyLocations);

@@ -4,7 +4,7 @@
   "description": "Find places on google map and the weather",
   "main": "index.js",
   "scripts": {
-    "build": "webpack -p --define process.env.NODE_ENV='\"production\"' --progress --colors",
+    "build": "npm run clean && webpack -p --define process.env.NODE_ENV='\"production\"' --progress --colors",
     "clean": "rimraf dist",
     "test": "echo \"Error: no test specified\" && exit 1",
     "serve": "webpack-dev-server"
@@ -61,6 +61,7 @@
     "less": "^3.0.1",
     "less-loader": "^4.0.5",
     "node-env-file": "^0.1.8",
+    "node-sass": "^4.8.3",
     "path": "^0.12.7",
     "react-key-index": "^0.1.1",
     "redux-devtools-extension": "^2.13.2",

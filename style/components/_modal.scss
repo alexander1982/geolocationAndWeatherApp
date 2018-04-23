@@ -1,0 +1,25 @@
+div#modalContainer {
+  .modal-content{
+    background: #141414;
+  }
+
+  .btn-primary{
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    height: 3rem;
+    width: 100%;
+    outline: none !important;
+    margin-top: 2rem;
+    border-color: transparent;
+    background: linear-gradient(to right, rgba(0, 17, 43, 1) 0%, rgba(1, 33, 81, 1) 30%, rgba(2, 47, 119, 1) 38%, rgba(2, 47, 119, 1) 66%, rgba(1, 33, 81, 1) 76%, rgba(0, 17, 43, 1) 100%);
+    box-shadow: 0 1px 5px #474747;
+    font-weight: 400;
+  }
+
+  .btn-primary:hover, .btn-primary:focus, .btn-primary:active .btn-primary:focus, .btn-primary:visited, .open > .dropdown-toggle.btn-primary{
+    border: none;
+    color: #ffffff;
+    background: linear-gradient(to right, rgb(2, 43, 123) 0%, rgba(1, 33, 81, 1) 30%, rgba(0, 17, 43, 1) 37%, rgba(0, 17, 43, 1) 64%, rgba(0, 17, 43, 1) 64%, rgba(1, 33, 81, 1) 76%, rgba(2, 47, 119, 1) 98%);
+  }
+}

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Field, reduxForm, reset, change } from 'redux-form';
+import { Field, reduxForm, reset } from 'redux-form';
 import { connect } from 'react-redux';
-import { fetchGeoLocation, cleanState, signIn, signOut } from '../actions/index';
+import { fetchGeoLocation } from '../actions/index';
 
 import logo from '../../assets/images/earth_logo.png';
 
@@ -23,7 +23,7 @@ class SearchNew extends Component {
 		<div className={className}>
 			<label><em><h6>{field.label}</h6></em></label>
 			<input
-			className="form-control form-width transparent-input input-inner-text search-input text-muted"
+			className="form-control form-width search-input text-muted"
 			name="form-input"
 			type="text"
 			{...field.input}/>
@@ -36,13 +36,13 @@ class SearchNew extends Component {
 		const { handleSubmit } = this.props;
 
 		return (
-		<div>
+		<div id="searchNewLocation">
 			<div className="container">
 				<div className="row">
 					<div className="col-10 col-sm-10 col-lg-10 padding-none">
 						<h4>Locate the weather</h4>
 					</div>
-					<div className="col-2 col-sm-2 col-lg-2 padding-none logo-padding-bottom">
+					<div className="col-2 col-sm-2 col-lg-2 padding-none">
 						<img src={logo} className="logo img-rounded"/>
 					</div>
 				</div>
@@ -63,10 +63,6 @@ class SearchNew extends Component {
 				component={this.renderField}/>
 				<button type="submit" className="btn-lg btn-block btn-primary submit-style box-shadow-bright"><span className="submit-inner-html button-text-shadow">Search</span>
 				</button>
-				<a onClick={() => {this.props.signInWithGoogle()}} className="btn-lg btn-block btn-primary submit-style box-shadow-bright"><span className="submit-inner-html button-text-shadow">Sign In</span>
-				</a>
-				<a onClick={() => {this.props.signOut()}} className="btn-lg btn-block btn-primary submit-style box-shadow-bright"><span className="submit-inner-html button-text-shadow">Sign Out</span>
-				</a>
 			</form>
 		</div>
 		)
@@ -97,4 +93,4 @@ export default reduxForm({
 	                         validate,
 	                         form           : 'NewSearchForm',
 	                         onSubmitSuccess: afterSubmit
-                         })(connect(null, { fetchGeoLocation, cleanState, signIn, signOut })(SearchNew))
+                         })(connect(null, { fetchGeoLocation })(SearchNew))

@@ -1,22 +1,18 @@
 import React, { Component } from 'react';
-const Chart = require('chart.js');
-const Moment = require('moment');
 import { connect } from 'react-redux';
-
 import $ from 'jquery';
 
+const Chart = require('chart.js');
+const Moment = require('moment');
+
 class WeatherChart extends Component {
-
 	componentDidMount() {
-
-		if(this.props.weather) {
+		if(this.props.weather){
 			const temps = this.props.weather.map(day => day.main.temp - 273.15);
 			const daysOfTheWeek = this.props.weather.map(day => Moment.unix(day.dt).format('Do'));
-			console.log('For glory ', temps, daysOfTheWeek);
-
 			$('document').ready(() => {
 				const ctx = document.getElementById("myChart").getContext('2d');
-				var myChart = new Chart(ctx, {
+				let myChart = new Chart(ctx, {
 					type   : 'bar',
 					data   : {
 						labels  : daysOfTheWeek,
@@ -64,25 +60,21 @@ class WeatherChart extends Component {
 										color  : "#505050"
 									}
 								}
-
 							]
 						}
 					}
 				});
 			})
 		}
-
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if(this.props.weather) {
+		if(this.props.weather){
 			const temps = nextProps.weather.map(day => day.main.temp - 273.15);
 			const daysOfTheWeek = nextProps.weather.map(day => Moment.unix(day.dt).format('Do'));
-			console.log('For glory ', temps, daysOfTheWeek);
-
 			$('document').ready(() => {
 				const ctx = document.getElementById("myChart").getContext('2d');
-				var myChart = new Chart(ctx, {
+				let myChart = new Chart(ctx, {
 					type   : 'bar',
 					data   : {
 						labels  : daysOfTheWeek,
@@ -130,14 +122,12 @@ class WeatherChart extends Component {
 										color  : "#505050"
 									}
 								}
-
 							]
 						}
 					}
 				});
 			})
 		}
-
 	}
 
 	render() {
@@ -146,5 +136,4 @@ class WeatherChart extends Component {
 		)
 	}
 }
-
 export default connect()(WeatherChart);

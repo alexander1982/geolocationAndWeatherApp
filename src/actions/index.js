@@ -29,8 +29,6 @@ export const TOGGLE_MODAL = 'toggle_modal';
 export const TOGGLE_NAV_BAR = 'toggle_nav_bar';
 export const SET_USER = 'set_user';
 export const SET_LOCATIONS_TO_STATE = 'set_locations_to_state';
-export const SET_SINGLE_LOCATION_TO_STATE = 'set_single_location_to_state';
-export const UNSET_SINGLE_LOCATION_FROM_STATE = 'unset_single_location_from_state';
 export const CLEAN_MY_LOCATIONS = 'clean_my_locations';
 
 firebase.auth().useDeviceLanguage();
@@ -109,7 +107,7 @@ export function Register() {
 export function signIn() {
 	let User = firebase.auth().currentUser;
 	if(!User){
-		signInWitGoogle().then(() => {
+		signInWithGoogle().then(() => {
 			firebase.auth().currentUser.link(credential);
 		})
 	} else {
@@ -118,9 +116,11 @@ export function signIn() {
 }
 
 export function signOut() {
-	store.dispatch(unsetUserFromState());
 	firebase.auth().signOut().then(() => {
 		console.log('Signed out');
+		store.dispatch(cleanMyLocations());
+		store.dispatch(cleanState());
+		store.dispatch(unsetUserFromState());
 	}, error => {
 		console.log('SignOut error ', error);
 	});
@@ -281,25 +281,6 @@ export function fetchWeather(values) {
 	return {
 		type   : FETCH_WEATHER,
 		payload: request
-	}
-}
-
-export function setUser(name, age, id) {
-	let user = { name, age, id };
-	axios.post('/users', user);
-}
-
-export function setSingleLocationToState(location) {
-	return {
-		type   : SET_SINGLE_LOCATION_TO_STATE,
-		payload: location
-	}
-}
-
-export function unsetSingleLocationFromState(location) {
-	return {
-		type   : UNSET_SINGLE_LOCATION_FROM_STATE,
-		payload: location
 	}
 }
 

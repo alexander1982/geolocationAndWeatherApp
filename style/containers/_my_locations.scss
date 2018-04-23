@@ -1,0 +1,56 @@
+div#myLocationsContainer {
+  .btn-primary_3{
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    height: 3rem;
+    width: 16rem;
+    outline: none !important;
+    border-color: transparent;
+    background: linear-gradient(to right, rgba(0, 17, 43, 1) 0%, rgba(1, 33, 81, 1) 30%, rgba(2, 47, 119, 1) 38%, rgba(2, 47, 119, 1) 66%, rgba(1, 33, 81, 1) 76%, rgba(0, 17, 43, 1) 100%);
+    box-shadow: 0 1px 5px #474747;
+    font-weight: 400;
+  }
+
+  .btn-primary_3:hover, .btn-primary_3:focus, .btn-primary_3:active .btn-primary_3:focus, .btn-primary_3:visited, .open > .dropdown-toggle.btn-primary_3{
+    border: none;
+    color: #ffffff;
+    background: linear-gradient(to right, rgb(2, 43, 123) 0%, rgba(1, 33, 81, 1) 30%, rgba(0, 17, 43, 1) 37%, rgba(0, 17, 43, 1) 64%, rgba(0, 17, 43, 1) 64%, rgba(1, 33, 81, 1) 76%, rgba(2, 47, 119, 1) 98%);
+  }
+
+  .box-shadow-bright{
+    animation: box-shadow-bright 10s steps(60) infinite alternate;
+  }
+
+
+
+  span.submit-inner-html{
+    font-size: medium;
+    text-shadow: 0 0 2px black;
+    font-weight: bolder;
+    color: #ffffff;
+  }
+
+  span.submit-inner-html:hover{
+    color: #e5e8ff;
+    text-shadow: 0 0 4px rgba(98, 102, 255, 0.55);
+  }
+
+  .button-text-shadow{
+    animation: button-text-shadow 4s steps(10) infinite alternate;
+  }
+
+  @keyframes button-text-shadow{
+    from{
+      text-shadow: 0 0 0 #141414;
+    }
+    to{
+      text-shadow: 0 0 15px white
+    }
+  }
+
+  div.dropdown-menu{
+    background: #141414 !important;
+    color: #ffffff !important;
+  }
+}

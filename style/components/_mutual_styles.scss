@@ -1,0 +1,50 @@
+
+html{
+  height: 100vh;
+  body{
+    //background-image: url('./images/earth.jpg');
+    font-family: Trebuchet MS, sans-serif;
+    color: #ffffff;
+    hr{
+      color: #ffffff;
+      background-color: #ffffff;
+      margin: 0;
+    }
+
+    h1{
+      font-size: 1.6em;
+    }
+
+    h4{
+      font-family: Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif;
+      font-weight: 400;
+      margin: 0;
+      padding: 0;
+    }
+
+    h5{
+      color: white !important;
+    }
+
+    h6{
+      margin: 1rem 0 0 0;
+    }
+
+    h6.color-white{
+      margin: 0;
+      color: white !important;
+    }
+
+    div.fullWidth{
+      width: 100vh;
+    }
+
+    div.header{
+      height: 100%;
+    }
+
+    div.column-mutual-css{
+      padding: 0.5%;
+    }
+  }
+}

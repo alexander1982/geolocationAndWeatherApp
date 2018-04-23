@@ -1,16 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { store } from '../index';
-import {
-cleanState,
-fetchGeoLocation,
-fetchWeather,
-setLocationToMyLocations,
-toggleModalAction,
-toggleNavBarAction
-} from '../actions/index';
-
-import tapOrClick from 'react-tap-or-click';
+import { cleanState, fetchGeoLocation, fetchWeather, setLocationToMyLocations, signIn, signOut, toggleModalAction, toggleNavBarAction } from '../actions/index';
 
 import GoogleMap from './google_map';
 import WeatherInfo from '../containers/weatherInfo';
@@ -26,33 +17,23 @@ class GeoIndex extends Component {
 		super(props);
 
 		this.state = {
-			userLocations: null,
-			location     : null
+			userLocations: null
 		}
 	}
 
 	componentDidMount() {
-		console.log('OGOGO');
-		if(this.props.userLocations && !this.props.location){
-			console.log('componentDidMount.this.props.userLocations ', this.props.userLocations);
+		if(this.props.userLocations){
 			this.setState({
 				              userLocations: this.props.userLocations
-			              });
-		} else if(this.props.userLocations && this.props.location){
-			this.setState({
-				              userLocations: this.props.userLocations,
-				              location     : this.props.location
 			              });
 		}
 	}
 
 	componentWillReceiveProps(nextProps) {
-		console.log('OLOLO');
 		if(nextProps.userLocations !== this.state.userLocations){
-			console.log('componentWillReceiveProps.nextProps.userLocations ', nextProps);
 			this.setState({
 				              userLocations: nextProps.userLocations,
-				              location: nextProps.location
+				              location     : nextProps.location
 			              });
 		}
 	}
@@ -63,7 +44,7 @@ class GeoIndex extends Component {
 
 	renderModal() {
 		$('body').
-		append('<button id="modalButton" type="button" className="btn btn-primary btn-lg display-none" data-toggle="modal" data-target="#exampleModalCenter"/>');
+		append('<button id="modalButton" type="button" className="btn btn-primary btn-lg display-none" data-toggle="modal" data-target="#modalContainer"/>');
 		$('#modalButton').click();
 	}
 
@@ -75,21 +56,21 @@ class GeoIndex extends Component {
 
 		if(this.props.location == null || !(this.props.location instanceof Object) || !this.props.location.data || this.props.location.data.status !== 'OK'){
 			return (
-			<div>
+			<div className="box-shadow-bright">
 				<img className="img-fluid gif-margin" src="http://cdn.ebaumsworld.com/mediaFiles/picture/416301/83779543.gif"/>
 			</div>
 			)
 		} else {
 			console.log('this.props.location.GoogleMap', this.props.location);
 			return (
-			<GoogleMap location={this.props.location} />
+			<GoogleMap location={this.props.location} className="box-shadow-bright"/>
 			)
 		}
 	}
 
 	renderWeatherInfo() {
 		if(this.props.weather){
-				return (
+			return (
 			<WeatherInfo weather={this.props.weather}/>
 			)
 		}
@@ -114,9 +95,21 @@ class GeoIndex extends Component {
 		return null;
 	}
 
+	renderSignInLogout() {
+		if(this.props.localUser.email) {
+			return (
+			<button onClick={() => {this.props.signOut()}} className="btn-lg btn-block btn-primary_2 box-shadow-bright"><span className="submit-inner-html button-text-shadow">Sign Out</span></button>
+			)
+		} else {
+			return (
+			<button onClick={() => {this.props.signIn()}} className="btn-lg btn-block btn-primary_2 box-shadow-bright"><span className="submit-inner-html button-text-shadow">Sign In</span></button>
+			)
+		}
+	}
+
 	render() {
 		return (
-		<div className="container-fluid">
+		<div className="container-fluid" id="geoIndexContainer">
 
 			<div className="row">
 				<div className="col-sm-12 col-lg-12 hidden-xs-down col-up-spacer">
@@ -124,17 +117,25 @@ class GeoIndex extends Component {
 				</div>
 			</div>
 			<div className="row">
-				<div className="col-sm-3 col-lg-3 hidden-lg-down">
 
-				</div>
+				<div className="col-sm-3 col-lg-3 hidden-lg-down"></div>
+
 				<div className="col-sm-2 col-12 hidden-sm-up" id="navBarContainer">
 					<NavBar/>
 				</div>
-				<div className="col-sm-4 col-lg-2 col-12 hidden-xs-down form-width search-width">
+
+				<div className="col-sm-4 col-lg-2 col-12 hidden-xs-down search-width">
 					<SearchNew/>
 				</div>
 				<div className="col-sm-8 col-lg-4 col-12 column-mutual-css map-width">
-					{this.renderMyLocations()}
+					<div className="col-sm-12 col-lg-12 col-12 column-mutual-css padding-bottom-1rem">
+						<div className="btn-group btn-group-sm" role="group" >
+							{this.renderMyLocations()}
+						</div>
+						<div className="btn-group btn-group-sm float-right" role="group" >
+							{this.renderSignInLogout()}
+						</div>
+					</div>
 					{this.renderMap()}
 				</div>
 
@@ -154,8 +155,8 @@ class GeoIndex extends Component {
 				</div>
 			</div>
 
-			<div className="modal fade" id="exampleModalCenter" tabIndex="-1" role="dialog"
-			     aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+			<div className="modal fade" id="modalContainer" tabIndex="-1" role="dialog"
+			     aria-labelledby="modalContainer" aria-hidden="true">
 				<div className="modal-dialog modal-dialog-centered" role="document">
 					<div className="modal-content">
 						<div className="modal-header">
@@ -173,7 +174,6 @@ class GeoIndex extends Component {
 					</div>
 				</div>
 			</div>
-
 		</div>
 
 		)
@@ -183,4 +183,4 @@ function mapStateToProps({ location, weather, form, toggleModal, toggleNavBar, u
 	return { location, weather, form, toggleModal, toggleNavBar, userLocations, localUser };
 }
 
-export default connect(mapStateToProps, { cleanState, fetchGeoLocation, fetchWeather, setLocationToMyLocations, toggleModalAction, toggleNavBarAction })(GeoIndex);
+export default connect(mapStateToProps, { cleanState, fetchGeoLocation, fetchWeather, setLocationToMyLocations, signIn, signOut, toggleModalAction, toggleNavBarAction })(GeoIndex);

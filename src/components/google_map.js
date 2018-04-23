@@ -4,27 +4,27 @@ import { connect } from 'react-redux';
 class GoogleMap extends Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			location: null
-		}
+		//this.state = {
+		//	location: null
+		//}
 	}
 
 	componentDidMount() {
 		console.log('from componentDidMount');
 		if(this.props.location){
 			this.renderThisMap(this.props.location);
-			this.setState({
-				              location: this.props.location
-			              })
+			//this.setState({
+			//	              location: this.props.location
+			//              })
 		}
 	}
 
 	componentWillReceiveProps(nextProps) {
 		if(nextProps.location){
 			this.renderThisMap(nextProps.location);
-			this.setState({
-				location: nextProps.location
-			              })
+		//	this.setState({
+		//		location: nextProps.location
+		//	              })
 		}
 	}
 

@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const htmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 let envFile = require('node-env-file');
@@ -17,14 +18,14 @@ const VENDOR_LIBS = [
 	"axios",
 	"lodash",
 	"react",
+	"jquery",
 	"react-dom",
 	"react-redux",
 	"react-router-dom",
 	"redux",
 	"redux-form",
 	"redux-promise",
-	"react-easy-chart",
-	"react-stockcharts"
+	"react-easy-chart"
 ];
 
 module.exports = {
@@ -44,12 +45,10 @@ module.exports = {
 				exclude: /node_modules/
 			},
 			{
-				test: /\.css$/,
-				use : ['style-loader', 'css-loader']
-			},
-			{
-				test   : /\.scss$/,
-				loaders: ["style-loader", "css-loader", "sass-loader"]
+				test: /\.(css|sass|scss)$/,
+				use : ExtractTextPlugin.extract({
+					                                use: ['css-loader', 'sass-loader']
+				                                })
 			},
 			{
 				test: /\.(jpe?g|png|gif|mp4)$/i,
@@ -67,11 +66,18 @@ module.exports = {
 			}
 		]
 	},
+	resolve  : {
+		alias     : {
+			ApplicationStyles: path.resolve(__dirname, 'style/app.scss')
+		},
+		extensions: ['.jsx', '.js', '.scss'],
+		modules   : ['node_modules']
+	},
 	plugins  : [
 		new webpack.ProvidePlugin({
 			$     : 'jquery',
 			jQuery: 'jquery'
-			
+
 		}),
 
 		new webpack.optimize.CommonsChunkPlugin({
@@ -79,6 +85,10 @@ module.exports = {
 		}),
 		new htmlWebpackPlugin({
 			template: 'src/index.html'
+		}),
+		new ExtractTextPlugin({ 
+			filename: 'dist/[name].bundle.css',
+			allChunks: true
 		}),
 		new webpack.DefinePlugin({
 			'process.env': {
@@ -91,17 +101,17 @@ module.exports = {
 				FIREBASE_MESSAGING_SENDER_ID: JSON.stringify(process.env.FIREBASE_MESSAGING_SENDER_ID),
 				GOOGLE_MAP_API_KEY          : JSON.stringify(process.env.GOOGLE_MAP_API_KEY),
 				OPEN_WEATHER_MAP_API_KEY    : JSON.stringify(process.env.OPEN_WEATHER_MAP_API_KEY),
-				FIREBASE_SDK_TYPE: JSON.stringify(process.env.FIREBASE_SDK_TYPE),
-				FIREBASE_SDK_PROJECT_ID: JSON.stringify(process.env.FIREBASE_SDK_PROJECT_ID),
-				FIREBASE_SDK_PRIVATE_KEY_ID: JSON.stringify(process.env.FIREBASE_SDK_PRIVATE_KEY_ID),
-				FIREBASE_SDK_PRIVATE_KEY: JSON.stringify(process.env.FIREBASE_SDK_PRIVATE_KEY),
-				FIREBASE_SDK_CLIENT_EMAIL: JSON.stringify(process.env.FIREBASE_SDK_CLIENT_EMAIL),
-				FIREBASE_SDK_CLIENT_ID: JSON.stringify(process.env.FIREBASE_SDK_CLIENT_ID),
-				FIREBASE_SDK_AUTH_URI: JSON.stringify(process.env.FIREBASE_SDK_AUTH_URI),
-				FIREBASE_SDK_TOKEN_URI: JSON.stringify(process.env.FIREBASE_SDK_TOKEN_URI),
-				FIREBASE_SDK_AUTH_PROVIDER: JSON.stringify(process.env.FIREBASE_SDK_AUTH_PROVIDER),
+				FIREBASE_SDK_TYPE           : JSON.stringify(process.env.FIREBASE_SDK_TYPE),
+				FIREBASE_SDK_PROJECT_ID     : JSON.stringify(process.env.FIREBASE_SDK_PROJECT_ID),
+				FIREBASE_SDK_PRIVATE_KEY_ID : JSON.stringify(process.env.FIREBASE_SDK_PRIVATE_KEY_ID),
+				FIREBASE_SDK_PRIVATE_KEY    : JSON.stringify(process.env.FIREBASE_SDK_PRIVATE_KEY),
+				FIREBASE_SDK_CLIENT_EMAIL   : JSON.stringify(process.env.FIREBASE_SDK_CLIENT_EMAIL),
+				FIREBASE_SDK_CLIENT_ID      : JSON.stringify(process.env.FIREBASE_SDK_CLIENT_ID),
+				FIREBASE_SDK_AUTH_URI       : JSON.stringify(process.env.FIREBASE_SDK_AUTH_URI),
+				FIREBASE_SDK_TOKEN_URI      : JSON.stringify(process.env.FIREBASE_SDK_TOKEN_URI),
+				FIREBASE_SDK_AUTH_PROVIDER  : JSON.stringify(process.env.FIREBASE_SDK_AUTH_PROVIDER),
 				FIREBASE_SDK_CLIENT_CERT_URL: JSON.stringify(process.env.FIREBASE_SDK_CLIENT_CERT_URL),
-				FIREBASE_PROCESS_PASS_ID: JSON.stringify(process.env.FIREBASE_SDK_CLIENT_CERT_URL)
+				FIREBASE_PROCESS_PASS_ID    : JSON.stringify(process.env.FIREBASE_SDK_CLIENT_CERT_URL)
 			}
 
 		}),

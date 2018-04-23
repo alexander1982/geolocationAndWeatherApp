@@ -1,5 +1,4 @@
 let firebase = require('firebase');
-let firebaseTools = require('firebase-tools');
 
 try {
 	let config = {
@@ -15,14 +14,4 @@ try {
 
 }
 
-firebase.database().ref().set({
-	appName: 'geolocationAndWeatherMap',
-	isRunning: true,
-	user: {
-		name: 'Alex',
-		age: 25
-	}
-                              });
-
-//export const firebaseRef = firebase.database().ref();
 module.exports =  firebase;

@@ -12,7 +12,6 @@ const day_thunder_storm = './images/day_thunder_storm.png';
 const day_light_snow = './images/day_light_snow.png';
 const overcast_clouds = './images/overcast_clouds.png';
 
-
 class WeatherInfo extends Component {
 	constructor(props) {
 		super(props);
@@ -49,6 +48,8 @@ class WeatherInfo extends Component {
 				return overcast_clouds;
 			case 'light rain':
 				return overcast_clouds;
+			case 'moderate rain':
+				return day_rain;
 			default:
 				console.log('no');
 				return 'no';
@@ -63,34 +64,32 @@ class WeatherInfo extends Component {
 		}
 
 		const weatherImage = this.renderWeatherImage();
-    const nowTemperature = Math.floor(this.state.weather[0].main.temp -273.15);
+		const nowTemperature = Math.floor(this.state.weather[0].main.temp - 273.15);
 
 		return (
-		<div className="row graph">
+		<div className="row graph" id="weatherInfoContainer">
 			<div className="col-lg-8 col-sm-8 col-7 no-padding padding-top-1rem">
-
 				<div className="col-sm-12 col-lg-12 col-12 search-margin no-padding">
 					<label className="text-font-size"><h6 className="weather-info-h6">Weather:</h6></label>
-					<span className="now-weather">{this.state.weather[0].weather[0].description}</span>
+					<span className="now-weather float-right"><span className="float-right">{this.state.weather[0].weather[0].description}</span></span>
 				</div>
 				<div className="col-sm-12 col-lg-12 col-12 search-margin no-padding">
 					<label className="text-font-size"><h6 className="weather-info-h6">Temperature:</h6></label>
-					<span className="now-weather">{nowTemperature}C&#176;</span>
+					<span className="now-weather float-right"><span className="float-right">{nowTemperature}C&#176;</span></span>
 				</div>
 				<div className="col-sm-12 col-lg-12 col-12 search-margin no-padding">
 					<label className="text-font-size"><h6 className="weather-info-h6">Wind:</h6></label>
-					<span className="now-weather">{this.state.weather[0].wind.speed}m/s</span>
+					<span className="now-weather float-right"><span className="float-right">{this.state.weather[0].wind.speed}m/s</span></span>
 				</div>
 				<div className="col-sm-12 col-lg-12 col-12 search-margin no-padding">
 					<label className="h6 text-font-size"><h6 className="weather-info-h6">Humidity:</h6></label>
-					<span className="now-weather">{this.state.weather[0].main.humidity}%</span>
+					<span className="now-weather float-right"><span className="float-right">{this.state.weather[0].main.humidity}%</span></span>
 				</div>
 				<div className="col-sm-12 col-lg-12 col-12 search-margin no-padding">
 					<label className="text-font-size"><h6 className="weather-info-h6">Pressure:</h6></label>
-					<span className="now-weather">{this.state.weather[0].main.pressure}hpa</span>
+					<span className="now-weather float-right"><span className="float-right">{this.state.weather[0].main.pressure}hpa</span></span>
 				</div>
 			</div>
-
 			<div className="col-lg-4 col-sm-4 col-5 text-center" id="weather-thumbnail">
 				<img src={weatherImage}
 				     className="img-fluid img-thumbnail weather-image-height"/>
@@ -99,7 +98,6 @@ class WeatherInfo extends Component {
 		)
 	}
 }
-
 export default WeatherInfo;
 
 

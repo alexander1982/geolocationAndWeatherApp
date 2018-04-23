@@ -7,17 +7,17 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import ReduxPromise from 'redux-promise';
 import logger from 'redux-logger';
 import reducers from './reducers';
-
 import GeoIndex from './components/geo_index';
 
 export const store = createStore(reducers, {}, composeWithDevTools(applyMiddleware(ReduxPromise,logger)));
 
-import '../style/style.css';
 import 'font-awesome-webpack2';
 
 let $ = require('jquery');
 window.jQuery = $;
 window.$ = window.jQuery;
+
+require('style-loader!css-loader!sass-loader!ApplicationStyles');
 
 ReactDOM.render(
 	<Provider store={store}>
